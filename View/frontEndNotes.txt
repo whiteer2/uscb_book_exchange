@@ -1,0 +1,17 @@
+Pages/front end modules that need to be done
+
+home page
+about us
+faq
+send us your feedback
+register a user
+forgot password
+create account
+login/logout
+edit/delete account
+create listing
+edit/delete user listings
+search listing/book 
+display seller information for listing
+email user
+
