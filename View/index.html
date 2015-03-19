@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>USCB Book Exchange</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -18,8 +18,67 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Hello, world!</h1>
-
+    <!-- Sticky Header Nav Bar -->
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- Logo will be inserted here -->
+          <a class="navbar-brand" href="#">USCB Book Exchange</a>
+        </div>
+        <!-- Left Header tabs -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <!-- Right Header tabs - account -->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Register/Login <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#">Register</a></li>
+                <li><a href="#">Login</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Sell</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    
+    <!-- Header -->
+    <a name="about"></a>
+    <div class="intro-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</h1>
+                        <h3>"Lorem ipsum dolor sit amet, consectetur adipiscing elit</h3>
+                        <ul class="list-inline intro-social-buttons">
+                            <li>
+                                <form class="navbar-form navbar-left" role="search">
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search for Book ...">
+                                  </div>
+                                  <button type="submit" class="btn btn-default">Search</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /.container -->
+    </div> <!-- /.intro-header -->
+    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
