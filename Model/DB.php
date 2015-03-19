@@ -563,29 +563,223 @@ function getBookByBookID($bookID){
 
 function insertPublisher($publisherName){
 	
+	if(!isset($publisherName)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
+	$stmt->bindParam(':publisherName', $thePublisherName);
+	
+	$thePublisherName = $publisherName;
+	
+	try{
+		if($stmt->execute()){
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
+	
 }
 
 function deletePublisherByPublisherName($publisherName){
+	
+	
+	if(!isset($publisherName)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("DELETE FROM publisher WHERE publisher = :publisherName LIMIT 1");
+	$stmt->bindParam(':publisherName', $thePublisherName);
+	
+	$thePublisherName = $publisherName;
+	
+	try{
+		if($stmt->execute()){
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
 	
 }
 
 function deletePublisherByPublisherID($publisherID){
 	
+	if(!isset($publisherID)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("DELETE FROM publisher WHERE publisherID = :publisherID LIMIT 1");
+	$stmt->bindParam(':publisherID', $thePublisherID);
+	
+	$thePublisherID = $publisherID;
+	
+	try{
+		if($stmt->execute()){
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
+	
 }
 
 function getPublisherIDByName($publisherName){
 	
+	if(!isset($publisherName)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("SELECT publisherID FROM publisher WHERE publisher = :publisherName LIMIT 1");
+	$stmt->bindParam(':publisherName', $thePublisherName);
+	
+	$thePublisherName = $publisherName;
+	
+	try{
+		if($stmt->execute()){
+			
+			$result = $stmt->fetch();
+			
+			if(!$result){
+				return FALSE;
+			}
+			else{
+				return $result['publisherID'];
+			}			
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
 }
 
 function getPublisherNameByID($publisherID){
 	
-}
-
-function getPublisherNameByName($publisherName){
+	
+	if(!isset($publisherID)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("SELECT publisher FROM publisher WHERE publisherID = :publisherID LIMIT 1");
+	$stmt->bindParam(':publisherID', $thePublisherID);
+	
+	$thePublisherID = $publisherID;
+	
+	try{
+		if($stmt->execute()){
+			
+			$result = $stmt->fetch();
+			
+			if(!$result){
+				return FALSE;
+			}
+			else{
+				return $result['publisher'];
+			}			
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
 	
 }
 
+function getPublisherNameByName($publisherName){
+		
+	
+	if(!isset($publisherName)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("SELECT publisher FROM publisher WHERE publisher = :publisherName LIMIT 1");
+	$stmt->bindParam(':publisherName', $thePublisherName);
+	
+	$thePublisherName = $publisherName;
+	
+	try{
+		if($stmt->execute()){
+			
+			$result = $stmt->fetch();
+			
+			if(!$result){
+				return FALSE;
+			}
+			else{
+				return $result['publisher'];
+			}			
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
+}
+
 function getPublisherIDByID($publisherID){
+			
+	if(!isset($publisherID)){
+		
+		return FALSE;
+		
+	}
+	
+	$stmt = $this->dbh->prepare("SELECT publisherID FROM publisher WHERE publisherID = :publisherID LIMIT 1");
+	$stmt->bindParam(':publisherID', $thePublisherID);
+	
+	$thePublisherID = $publisherID;
+	
+	try{
+		if($stmt->execute()){
+			
+			$result = $stmt->fetch();
+			
+			if(!$result){
+				return FALSE;
+			}
+			else{
+				return $result['publisherID'];
+			}			
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
 	
 }
 
