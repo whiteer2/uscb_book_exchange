@@ -1,6 +1,7 @@
 <?php
 
 require_once 'User.php';
+require_once 'Listing.php';
 
 class DB{
 
@@ -210,7 +211,7 @@ function insertUser(User $user){
 	
 }
 
-//takes a user object and attempts to delete it from the DB. returns true if successfull, and false otherwise
+//takes a user object and attempts to delete it from the DB. returns true if successful, and false otherwise
 function deleteUser(User $user){
 	
 	$isUserSet = $user->isUserSet();
@@ -230,7 +231,7 @@ function deleteUser(User $user){
     	}		
 }
 
-//takes a string userID and attempts to delete the user form the DB. returns true if successfull, and false otherwise
+//takes a string userID and attempts to delete the user from the DB. returns true if successful, and false otherwise
 function deleteUserByUserID($userID){
 	
 	$stmt = $this->dbh->prepare("DELETE FROM user WHERE userID = :userID LIMIT 1");
@@ -508,12 +509,29 @@ function updateUserScheduleByEmailID($emailID, $schedule){
 // DB FUNCTIONS FOR ERNEST
 
 function insertListing(Listing $someListing){
+	
+	if(!isset($someListing->isListingSet())){
+	
+		return FALSE;
 		
-	$IDofListing = $someListing->getlistingId();
-	$ISBN = $someListing->getISBN();
-	// not sure if i need more variables her for listing will look at it in the morning
-	//ERW (3/19/15)
+	}
+	else{
 		
+	$stmt = $this->dbh->prepare("INSERT INTO listing ( ListingID , ISBN , userID  , price , isNegotiable , description ) VALUES ( :newListing , :newISBN , :newUserID , :newPrice , :newisNegotiable, :newDescription )");
+	
+	$stmt->bindParam(':newListing', $newListing);
+	$stmt->bindParam(':newISBN', $newISBN);
+	$stmt->bindParam(':newUserID', $newUserID);
+	$stmt->bindParam(':newPrice', $newPrice);	
+	$stmt->bindParam(':newisNegotiable', $newIsNegotiable);
+	$stmt->bindParam(':newDescription', $newDescription);
+						
+	$newListing = $someListing->getListingID();
+	$newISBN = $someListing->getISBN();
+	$newUserID = $someListing->getUserID();
+	$newPrice = $someListing->getPrice();
+	$newIsNegotiable = $someListing->isNegotiable();
+	$newDescription = $someListing->getDescription();
 	
 	try{
 		if($stmt->execute()){
@@ -522,103 +540,299 @@ function insertListing(Listing $someListing){
 		else{
 			return FALSE;
 		}
-	}
+	}//end of the try statment
 	catch(exception $e){
 		return FALSE;
-	}
-  }	
-}
+	}//end of the catch statement
+	
+  }	//end of the else
+}//end of the function
 
 function deleteListingByListingID($listingID){
 	
-}
+		if(!isset($listingID)){
+			
+				return FALSE;
+				
+		}
+		else{
+			
+			$stmt = $this->dbh->prepare("DELETE FROM listing WHERE listingID = :listingID LIMIT 1");
+			$stmt->bindParam(':listingID',$theListingID);
+	 
+	 		$theListingID = $listingID; 			
+			
+	 		try{
+	 			if($stmt->excute())
+				
+	 			{
+	 				
+				return TRUE;
+				
+				}	
+				 		
+	 			else{
+	 				
+	 			return FALSE;
+					
+	 			}
+				
+	}//end of the try
+	
+	catch(exception $e){
+		
+		return FALSE;
+		
+	}//end of the catch 
+	
+}//end of else
+		
+	
+}//end of the function
+		
+	 
+	
 
 function deleteAllListingsByUserID($userID){
 	
-}
-//This should be the code need for this function 
-//Goal fromt he looks of is for the Function to get listing by 
-function getListingbyListingID($listingID){
-$stmt =  $this->dbh->prepare("SELECT Listing FROM ListingID WHERE Listing = :email LIMIT 1");
-$stmt -> bindParam(':Listing' , $IDofListing);
-$IDofListing = $listingID;
+	if(!isset($userID)){
+		
+		return FALSE;
+		
+	}//end if
+	
+	else{
+		
+		$stmt =  $this->dbh->prepare("DELETE FROM listing WHERE userID = :theUserID");
+		
+		$stmt -> bindParam(':theUserID' , $IDofTheUser);
 
-try{
-	if($stmt->excute()){
-			$result = $stmt->fetch();
-			
-	if(!$result){
-			return FALSE;
+		$IDofTheUser = $userID;
+
+		try{
+	 			if($stmt->excute())				
+	 			{
+	 				
+				return TRUE;
+				
+				}	
+				 	
+	 			else{
+	 				
+	 			return FALSE;
 					
-		}
+	 			}
+				
+		}//end of the try
+			
+		catch(exception $e){
+		
+			return FALSE;
+			
+		}//end of catch statement	
+		
+		
+}//end else
+	
+}//end delete all function
+
+
+//This should be the code need for this function 
+//Goal fromt he looks of is for the Function to get listing by THE Listing ID
+function getListingbyListingID($listingID){
+	
+	if(!isset($userID)){
+		
+		return FALSE;
+		
+	}//end if
+	else{
+		
+		$stmt =  $this->dbh->prepare("SELECT * FROM listing WHERE listingID = :theListingID LIMIT 1");
+	
+		$stmt -> bindParam(':theListingID' , $IDofListing);
+
+		$IDofListing = $listingID;
+
+		try{
+			
+			if($stmt->excute()){
+				
+			$result = $stmt->fetch();
+	
+			if(!$result){
+				
+				return FALSE;
+					
+			}
 		
 			else{
-				return $result['Listing'];
+				
+				return createListingFromResult($result);
+				
 			}
 		}
+			
 		else{
+			
 			return FALSE;
 			
 		}
-	}	
+	}	//end of try statement
+	
 	catch(exception $e){
+		
 		return FALSE;
 	
-	}
+	}//end of catch statement
+		
+}//end else		
 	
+}//end of function
+
 
 function getListingsByUserID($userID){
-$stmt =  $this->dbh->prepare("SELECT Listing FROM UserID WHERE Listing = :email LIMIT 1");
-$stmt -> bindParam(':Listing' , $IdofUscb);
-$IDofListing = $listingID;
-
-try{
-	if($stmt -> excute()){
-		if(!$result)
-		{
-			return FALSE;
-					
-		}
+	
+	if(!isset($userID)){
 		
-		else
-			{
-				return $result['Listing'];
+		return FALSE;
+		
+	}//end if
+	
+	else{
+		
+		$stmt =  $this->dbh->prepare("SELECT * FROM listing WHERE userID = :theUserID");
+
+		$stmt -> bindParam(':theUserID' , $IDofUser);
+
+		$IDofUser = $userID;
+
+		try{
+			if($stmt -> excute()){
+		
+				if(!$result)
+				{
+			
+				return FALSE;
+					
+				}
+		
+				else
+				{						
+				
+					return createListingFromResult($result);
+				
+				}
 			}
-	}
+			
 		else 
-		{
+			{
+			
 			return FALSE;
 			
 		}
-		}	
+	
+	}	//end of try statement
 	catch(exception $e){
 	
+		return FALSE;
 	
-	}
+	}//end of catch statement
 	
+		
+		
+	}//end else
 	
-}
+}//end of function
 
-function updateListingByListingID($listingID){
+
+private function createListingFromResult($result){
 	
-	$stmt -> $this->dbh->prepare("UPDATE Listing SET ListingID = :ListingID ");
+				$foundListing = new Listing();
+				
+				$foundListing->setListingID($result['listingID']);
+				
+				$foundListing->setISBN($result['ISBN']);
+				
+				$foundListing->setUserID($result['userID']);
+				
+				$foundListing->setPrice($result['price']);
+				
+				$foundListing->setIsNegotiable($result['isNegotiable']);
+				
+				$foundListing->setDescription($result['description']);
+				
+				return $foundListing;
 	
-	$stmt ->bindParam(':listingID',$IDofListing);
-	$IDofListing = $listingID;
+}//end function
+
+function updateListingByListingID(Listing $someListing){
 	
-	try{
-		if($stmt->excute()){
-			return TRUE;
-		}
-		else{
+	if(!$someListing->isListingSet()){
+		
+		return FALSE;
+		
+	}
+	else{		
+		
+		$stmt -> $this->dbh->prepare("UPDATE listing SET (listingID = :theListingID, ISBN = :theISBN, userID = :theUserID, price = :thePrice, isNegotiable = :theIsNegotiable, description = :theDescription) WHERE listingID = :someListingID");
+	
+		//"INSERT INTO listing ( ListingID , ISBN , userID  , price , isNegotiable , description ) VALUES ( :newListing , :newISBN , :newUserID , :newPrice , :newisNegotiable, :newDescription )
+	
+		$stmt ->bindParam(':theListingID',$IDofListing);
+	
+		$stmt ->bindParam(':theISBN',$theISBN);
+	
+		$stmt ->bindParam(':theUserID',$theUserID);
+	
+		$stmt ->bindParam(':thePrice',$thePrice);
+	
+		$stmt ->bindParam(':theIsNegotiable',$theIsNegotiable);
+	
+		$stmt ->bindParam(':theDescription',$theDescription);
+	
+		$stmt ->bindParam(':someListingID',$someListingID);	
+	
+		
+	
+		$IDofListing = $someListing->getListingID();
+	
+		$theISBN = $someListing->getISBN();
+	
+		$theUserID = $someListing->getUserID();
+	
+		$thePrice = $someListing->getPrice();
+	
+		$theIsNegotiable = $someListing->isNegotiable();
+	
+		$theDescription = $someListing->getDescription();
+	
+		$someListingID = $someListing->getListingID();	
+	
+		try{
+		
+			if($stmt->excute()){
+			
+				return TRUE;
+			
+			}
+	
+			else{
+			
+				return FALSE;	
+	
+			}
+		}//end of try statment
+	
+		catch(exception $e){
+		
 			return FALSE;	
-	}
-	}
-	catch(exception $e){
-	return FALSE;	
-	}
 	
-}
+		}//end of catch statement
+	
+	}//end else
+	
+}//end of update Listing by Listing function
 
 
 //For Tremaine

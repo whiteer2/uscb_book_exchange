@@ -5,80 +5,89 @@ class Listing{
 	//Listing class for ernest to code. please reference the DB schema 
 	private $listingID;//
 	private $ISBN;//
-	private $userId;//
+	private $userID;//
 	private $price;//
 	private $isNegotiable;//
 	private $description;
 	
 	//These should be all the set and get methods needed for the project
-function getlistingId(){
 	
-		return $this ->listingID = 0;
+	function __construct(){
+		
+		$this->price = 0;
+		$this->isNegotiable = 0;
+		$this->description = NULL;
+		
+	}
+	
+function getListingID(){
+	
+		return $this ->listingID;
 		
 }
 	
 function getISBN(){
 	
-		return $this ->ISBN = 0;
+		return $this ->ISBN;
 		
 }
 	
 	
-function getuserId(){
+function getUserID(){
 	
-		return $this ->userID = 0;
+		return $this ->userID;
 }
 		
-function getpriceId(){
+function getPrice(){
 	
-		return $this -> priceID = 0;
+		return $this -> price;
 	
 }
 	
-function getisNegotiableId(){
+function isNegotiable(){
 	
-		return $this -> listingID = 0;
+		return $this -> isNegotiable;
 								
 }
 	
-function getdescriptionId(){
+function getDescription(){
 	
-		return $this -> listingID = 0;
+		return $this -> description;
 		
 }
 	
-function setlistingID($newListingID){
+function setListingID($newListingID){
 	
 		$this-> listingID = $newListingID;
 		
 }
 	
-function setpriceID($newPriceID){
+function setPrice($newPrice){
 	
-		$this-> priceID = $newPriceID;
+		$this-> price = $newPrice;
 
 }
 
-function setISBN($newIsbn){
+function setISBN($newISBN){
 	
-		$this-> ISBN = $newIsbn;
+		$this->ISBN = $newISBN;
 		
 }	
 
-function setuserId($newUserID){
+function setUserID($newUserID){
 	
-		$this-> userID = $newUserID;
+		$this->userID = $newUserID;
 							
 }
 
-function setupisNegotiable($newIsNegotiable){
+function setIsNegotiable($newIsNegotiable){
 	
 		$this-> isNegotiable = $newIsNegotiable;
 		
 }
 
 
-function setdescription($newDescription){
+function setDescription($newDescription){
 	
 		$this-> description = $newDescription;
 											
@@ -86,7 +95,7 @@ function setdescription($newDescription){
 	
 //this should be all the functions needed to test 
 //whether the the listing plaved in the back end is good
-function islistingSet()
+function isListingSet()
 {
 	
 	if(!isset($this-> userID )){
@@ -106,6 +115,24 @@ function islistingSet()
 	return FAlSE;
 		
 	}	
+	
+	if(!isset($this-> price )){
+	
+	return FAlSE;
+		
+	}	
+	
+	if(!isset($this-> isNegotiable )){
+	
+	return FAlSE;
+		
+	}	
+	
+	// if(!isset($this-> description )){
+// 	
+	// return FAlSE;
+// 		
+	// }	
 	
 	return TRUE;
 	
