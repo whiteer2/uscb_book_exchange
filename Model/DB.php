@@ -508,7 +508,25 @@ function updateUserScheduleByEmailID($emailID, $schedule){
 // DB FUNCTIONS FOR ERNEST
 
 function insertListing(Listing $someListing){
+		
+	$IDofListing = $someListing->getlistingId();
+	$ISBN = $someListing->getISBN();
+	// not sure if i need more variables her for listing will look at it in the morning
+	//ERW (3/19/15)
+		
 	
+	try{
+		if($stmt->execute()){
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
+  }	
 }
 
 function deleteListingByListingID($listingID){
@@ -518,18 +536,90 @@ function deleteListingByListingID($listingID){
 function deleteAllListingsByUserID($userID){
 	
 }
-
+//This should be the code need for this function 
+//Goal fromt he looks of is for the Function to get listing by 
 function getListingbyListingID($listingID){
+$stmt =  $this->dbh->prepare("SELECT Listing FROM ListingID WHERE Listing = :email LIMIT 1");
+$stmt -> bindParam(':Listing' , $IDofListing);
+$IDofListing = $listingID;
+
+try{
+	if($stmt->excute()){
+			$result = $stmt->fetch();
+			
+	if(!$result){
+			return FALSE;
+					
+		}
+		
+			else{
+				return $result['Listing'];
+			}
+		}
+		else{
+			return FALSE;
+			
+		}
+	}	
+	catch(exception $e){
+		return FALSE;
 	
-}
+	}
+	
 
 function getListingsByUserID($userID){
+$stmt =  $this->dbh->prepare("SELECT Listing FROM UserID WHERE Listing = :email LIMIT 1");
+$stmt -> bindParam(':Listing' , $IdofUscb);
+$IDofListing = $listingID;
+
+try{
+	if($stmt -> excute()){
+		if(!$result)
+		{
+			return FALSE;
+					
+		}
+		
+		else
+			{
+				return $result['Listing'];
+			}
+	}
+		else 
+		{
+			return FALSE;
+			
+		}
+		}	
+	catch(exception $e){
+	
+	
+	}
+	
 	
 }
 
 function updateListingByListingID($listingID){
 	
+	$stmt -> $this->dbh->prepare("UPDATE Listing SET ListingID = :ListingID ");
+	
+	$stmt ->bindParam(':listingID',$IDofListing);
+	$IDofListing = $listingID;
+	
+	try{
+		if($stmt->excute()){
+			return TRUE;
+		}
+		else{
+			return FALSE;	
+	}
+	}
+	catch(exception $e){
+	return FALSE;	
+	}
+	
 }
+
 
 //For Tremaine
 function searchListings($searchQuery){
