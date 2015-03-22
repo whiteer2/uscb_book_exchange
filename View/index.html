@@ -19,7 +19,7 @@
   </head>
   <body background="img/home-pagebackground.png">
     <!-- Sticky Header Nav Bar -->
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -44,8 +44,8 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Register/Login <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Register</a></li>
-                <li><a href="#">Login</a></li>
+                <li><a href="#register-modal" data-toggle="modal" data-target="#register-modal">Register</a></li>
+                <li><a href="#login-modal" data-toggle="modal" data-target="login-modal">Login</a></li>
               </ul>
             </li>
             <li><a href="#">Sell</a></li>
@@ -79,7 +79,7 @@
     </section> <!-- /.intro-header -->
     
     <!-- About Section -->
-    <section class="content-section-a">
+    <section class="content-section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-5 col-sm-6">
@@ -96,21 +96,11 @@
         </div>
     </section>
     
-    <!-- Bottom Section Bar -->
-    <section>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3>Lorem Ipsum dolor Lorem Ipsum dolor</h3>
-                </div>
-            </div>
-        </div>
-    </section>
-    
     <!-- Bottom Section -->
     <section>
         <div class="container">
             <div class="row">
+                <h3>Lorem Ipsum dolor Lorem Ipsum dolor</h3>
                 <div class="">
                     <p>Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor Lorem Ipsum dolor</p>
                 </div>
@@ -123,6 +113,28 @@
             </div>
         </div>
     </section>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="#register-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Register</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="#login-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Login</h2>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
