@@ -2,6 +2,7 @@
 
 require_once 'User.php';
 require_once 'Listing.php';
+require_once 'Book.php';
 
 class DB{
 
@@ -510,7 +511,7 @@ function updateUserScheduleByEmailID($emailID, $schedule){
 
 function insertListing(Listing $someListing){
 	
-	if(!isset($someListing->isListingSet())){
+	if(!$someListing->isListingSet()){
 	
 		return FALSE;
 		
@@ -844,14 +845,22 @@ function searchListings($searchQuery){
 //DB FUNCTIONS FOR ZACH
 
 function insertBook(Book $newBook){
-	$isBookSet = $book->isBookSet();
+	
+	//this method isBookSet is undefined in the book class. This method needs to be defined!!!!! You are alsop passing it newbook, not a variable called book. 
+	//anytime you try to reference an object named book, you are going to throw errors
+	
+	$isBookSet = $newBook->isBookSet();
 	
 	if(!$isBookSet){
+		
 		return false;
+		
 	}
+	
 	else{
 		
-	$stmt = $this->dbh->prepare("INSERT INTO book ( ISBN, author, subject, publisherID, title,subject ) VALUES ( :ISBN , :author , :subject , :publisherID , :title, :subject, :isBanned )");
+	//Fixed this SQL query - Bill Glesias 3/22/15
+	$stmt = $this->dbh->prepare("INSERT INTO book ( ISBN, author, subject, publisherID, title ) VALUES ( :ISBN , :author , :subject , :publisherID , :title )");
 	
 	$stmt->bindParam(':ISBN', $ISBN);
 	$stmt->bindParam(':author', $author);
@@ -859,27 +868,35 @@ function insertBook(Book $newBook){
 	$stmt->bindParam(':publisherID', $publisherID);
 	$stmt->bindParam(':title', $title);
 	
-	$ISBN = $book->getISBN();
-	$author = $book->getAuthor();
-	$subject = $book->getSubject();
-	$publisherID = $book->getPublisherID();
-	$title = $book->getTitle();
+	$ISBN = $newBook->getISBN();
+	$author = $newBook->getAuthor();
+	$subject = $newBook->getSubject();
+	$publisherID = $newBook->getPublisherID();
+	$title = $newBook->getTitle();
 
 	
 	try{
 		if($stmt->execute()){
+			
 			return TRUE;
-		}
+			
+		}//end if
+		
 		else{
+			
 			return FALSE;
-		}
-	}
+			
+		}//end else
+		
+	}//end try
 	catch(exception $e){
+		
 		return FALSE;
-	}
-  }	
+		
+	}//end catch
+  }//end else
 
-}
+}//end function
 
 function deleteBook(Book $someBook){
 	
@@ -891,39 +908,74 @@ function deleteBookByBookID($bookID){
 }
 
 function getBook(Book $someBook){
-		$stmt = $this->dbh->prepare("SELECT * FROM book WHERE bookID = :bookID LIMIT 1");
-$stmt->bindParam(':bookID', $IDofBook);
-$IDofBook = $IDofBook;
-try{
-if($stmt->execute()){
-$result = $stmt->fetch();
-if(!$result){
-return FALSE;
-}
-else{
-$newBook = new Book();
-$newBook->setISBN($result['ISBN']);
-$newBook->setPublisherID($result['publisherID']);
-$newBook->settitle($result['title']);
-$newBook->setAuthor($result['author']);
-$newBook->setSubject($result['subject']);
-
-if($result['isBanned'] == 1){
-$newBook->ban();
-}
-return $newBook;
-}
-}
-else{
-return FALSE;
-}
-}
-catch(exception $e){
-return FALSE;
-}
-
 	
-}
+	if(!$someBook->isBookSet()){
+		
+		return false;
+		
+	}
+	else{
+	
+		$stmt = $this->dbh->prepare("SELECT * FROM book WHERE bookID = :bookID LIMIT 1");
+		$stmt->bindParam(':bookID', $IDofBook);
+
+		//this bound parameter is not correct. 
+		$IDofBook = $someBook->getISBN();
+
+		try{
+			
+			if($stmt->execute()){
+				
+				$result = $stmt->fetch();
+				
+				if(!$result){
+				
+					return FALSE;
+				
+				}//end if
+		
+				else{
+					
+					
+					$newBook = new Book();
+
+					$newBook->setISBN($result['ISBN']);
+
+					$newBook->setPublisherID($result['publisherID']);
+
+					$newBook->settitle($result['title']);
+
+					$newBook->setAuthor($result['author']);
+
+					$newBook->setSubject($result['subject']);
+					
+					
+					//why the hell would we be banning a book? We arent dealing with 50 Shades of Gay here...
+					// if($result['isBanned'] == 1){
+						
+						// $newBook->ban();
+						
+						// }
+
+					return $newBook;
+				}//end else
+			}//;end if
+			
+			else{
+				
+				return FALSE;
+			}
+			
+		}//end try
+		
+	catch(exception $e){
+		
+		return FALSE;
+
+	}//end catch.
+}//end else
+	
+}//end function
 
 function getBookByBookID($bookID){
 	
