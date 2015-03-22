@@ -541,48 +541,190 @@ function searchListings($searchQuery){
 
 function insertBook(Book $newBook){
 	
+	if(!$isBookSet)
+	{
+		return false;
+	}
+	else
+	{
+	
+	$stmt = $this->dbh->prepare("INSERT INTO book ( ISBN, publisherID, title, author,subject, ) VALUES ( :ISBN ,:publisherID,:title,:author,:subject)");
+	
+	$stmt->bindParam(':ISBN', $theISBN);
+	$stmt->bindParam(':author', $theAuthor);
+	$stmt->bindParam(':subject', $theSubject);
+	$stmt->bindParam(':publisherID', $thePublisherID);
+	$stmt->bindParam(':title', $bookTitle);
+	
+	$ISBN = $book->getISBN();
+	$author = $book->getAuthor();
+	$subject = $book->getSubject();
+	$publisherID = $book->getPublisherID();
+	$title = $book->getTitle();
+
+	
+	try{
+	if($stmt->execute()){
+	return TRUE;
+   }
+	else{
+	return FALSE;
+	}
+	}
+	catch(exception $e){
+	return FALSE;
+	}
+ } 
+	
+	
 }
 
 function deleteBook(Book $someBook){
 	
+	$isBookSet = $someBook->isUserSet();
+	
+	if(!$isBookSet)
+	{
+		return false;
+	}
+	else
+	{
+		$bookTitle = $book->getTitle();
+		if($this->deleteBookByBookTitle($bookTitle))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+    } 
+	
 }
 
-function deleteBookByBookID($bookID){
+function deleteBookByBookID($publisherID){
+	
+	$isBookSet = $publisherID->isUserSet();
+	if(!$isBookSet)
+	{
+		return false;
+	}
+	else
+	{
+	$publisherID = $book->getBookID();
+	
+		if($this->deleteBookByBookID($publisherID))
+		{
+			return TRUE;
+		}
+	else
+	{
+		return FALSE;
+	}
+ } 
 	
 }
 
 function getBook(Book $someBook){
+		$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :ISBN");
+$stmt->bindParam(':ISBN', $theISBN);
+$theISBN = $ISBN;
+try{
+if($stmt->execute()){
+$result = $stmt->fetch();
+if(!$result){
+return FALSE;
+}
+else{
+$newBook = new Book();
+$newBook->setISBN($result['ISBN']);
+$newBook->setPublisherID($result['publisherID']);
+$newBook->settitle($result['title']);
+$newBook->setAuthor($result['author']);
+$newBook->setSubject($result['subject']);
+
+if($result['isBanned'] == 1){
+$newBook->ban();
+}
+return $newBook;
+}
+}
+else{
+return FALSE;
+}
+}
+catch(exception $e){
+return FALSE;
+}
 	
 }
 
-function getBookByBookID($bookID){
-	
+function getBookByBookID($publisherID){
+	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE publisherID = :publisherID");
+$stmt->bindParam(':publisherID', $thePublisherID);
+$thePublisherID = $publisherID;
+try
+{
+ 	if($stmt->execute())
+ 	{
+		$result = $stmt->fetch();
+		if(!$result){
+		return FALSE;
+		}
+	else
+	{
+			$newBook = new Book();
+			$newBook->setISBN($result['ISBN']);
+			$newBook->setPublisherID($result['publisherID']);
+			$newBook->settitle($result['title']);
+			$newBook->setAuthor($result['author']);
+			$newBook->setSubject($result['subject']);
+
+		if($result['isBanned'] == 1)
+		{
+			$newBook->ban();
+		}
+			return $newBook;
+	}//end else statement
+	}//end if statement
+	else
+	{
+		return FALSE;
+	}
+}//end try block
+catch(exception $e)
+	{
+	return FALSE;
+	}
 }
 
 //no need to have update book function as we will not be updating books!
 
 function insertPublisher($publisherName){
 	
-	if(!isset($publisherName)){
-		
+	if(!isset($publisherName))
+	{
 		return FALSE;
-		
 	}
 	
-	$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
-	$stmt->bindParam(':publisherName', $thePublisherName);
+		$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
+		$stmt->bindParam(':publisherName', $thePublisherName);
+			
+		$thePublisherName = $publisherName;
 	
-	$thePublisherName = $publisherName;
-	
-	try{
-		if($stmt->execute()){
+	try
+	{
+		if($stmt->execute())
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	catch(exception $e){
+	catch(exception $e)
+	{
 		return FALSE;
 	}
 	
@@ -591,10 +733,9 @@ function insertPublisher($publisherName){
 function deletePublisherByPublisherName($publisherName){
 	
 	
-	if(!isset($publisherName)){
-		
-		return FALSE;
-		
+	if(!isset($publisherName))
+	{	
+		return FALSE;	
 	}
 	
 	$stmt = $this->dbh->prepare("DELETE FROM publisher WHERE publisher = :publisherName LIMIT 1");
@@ -602,15 +743,19 @@ function deletePublisherByPublisherName($publisherName){
 	
 	$thePublisherName = $publisherName;
 	
-	try{
-		if($stmt->execute()){
+	try
+	{
+		if($stmt->execute())
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	catch(exception $e){
+	catch(exception $e)
+	{
 		return FALSE;
 	}
 	
