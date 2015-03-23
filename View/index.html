@@ -118,8 +118,18 @@
     <div class="modal fade" id="register-modal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-title">
                     <h2>Register</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Already have an account? <a href="#">click here</a></p>
+                    <form role="form" action="">
+                        <input type="email" name="email" placeholder="Enter USCB Email" class="input-xlarge"><br>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p>If the email entered is a valid USCB email a confirmation link will be sent.</p>
                 </div>
             </div>
         </div>
@@ -129,8 +139,19 @@
     <div class="modal fade" id="login-modal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Login</h2>
+                <div class="modal-title">
+                    <h2>Account Sign-In</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Don't have an account? <a href="#">click here</a></p>
+                    <form role="form" action="">
+                        <input type="email" name="email" placeholder="Enter USCB Email"><br>
+                        <input type="password" name="password" placeholder="Enter Password"><br>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p>Forgot Password? <a href="#">click here</a></p>
                 </div>
             </div>
         </div>
