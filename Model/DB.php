@@ -845,14 +845,17 @@ function searchListings($searchQuery){
 
 function insertBook(Book $newBook){
 	
+	$isBookSet = $newBook->isBookSet();
+	
 	if(!$isBookSet)
 	{
+		//echo 'this shit isnt set';
 		return false;
 	}
 	else
 	{
 	
-	$stmt = $this->dbh->prepare("INSERT INTO book ( ISBN, publisherID, title, author,subject, ) VALUES ( :ISBN ,:publisherID,:title,:author,:subject)");
+	$stmt = $this->dbh->prepare("INSERT INTO book ( ISBN, publisherID, title, author,subject ) VALUES ( :ISBN ,:publisherID,:title,:author,:subject)");
 	
 	$stmt->bindParam(':ISBN', $theISBN);
 	$stmt->bindParam(':author', $theAuthor);
@@ -860,11 +863,11 @@ function insertBook(Book $newBook){
 	$stmt->bindParam(':publisherID', $thePublisherID);
 	$stmt->bindParam(':title', $bookTitle);
 	
-	$ISBN = $newBook->getISBN();
-	$author = $newBook->getAuthor();
-	$subject = $newBook->getSubject();
-	$publisherID = $newBook->getPublisherID();
-	$title = $newBook->getTitle();
+	$theISBN = $newBook->getISBN();
+	$theAuthor = $newBook->getAuthor();
+	$theSubject = $newBook->getSubject();
+	$thePublisherID = $newBook->getPublisherID();
+	$bookTitle = $newBook->getTitle();
 
 	
 	try{
@@ -872,10 +875,13 @@ function insertBook(Book $newBook){
 	return TRUE;
    }
 	else{
+		//echo ' no error, but something wrong';
 	return FALSE;
 	}
 	}
 	catch(exception $e){
+		
+		//echo 'we got a problem';
 	return FALSE;
 	}
  } 
