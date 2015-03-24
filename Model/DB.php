@@ -510,7 +510,7 @@ function updateUserScheduleByEmailID($emailID, $schedule){
 
 function insertListing(Listing $someListing){
 	
-	if(!isset($someListing->isListingSet())){
+	if(!$someListing->isListingSet()){
 	
 		return FALSE;
 		
@@ -860,11 +860,11 @@ function insertBook(Book $newBook){
 	$stmt->bindParam(':publisherID', $thePublisherID);
 	$stmt->bindParam(':title', $bookTitle);
 	
-	$ISBN = $book->getISBN();
-	$author = $book->getAuthor();
-	$subject = $book->getSubject();
-	$publisherID = $book->getPublisherID();
-	$title = $book->getTitle();
+	$ISBN = $newBook->getISBN();
+	$author = $newBook->getAuthor();
+	$subject = $newBook->getSubject();
+	$publisherID = $newBook->getPublisherID();
+	$title = $newBook->getTitle();
 
 	
 	try{
@@ -893,7 +893,7 @@ function deleteBook(Book $someBook){
 	}
 	else
 	{
-		$bookTitle = $book->getTitle();
+		$bookTitle = $someBook->getTitle();
 		if($this->deleteBookByBookTitle($bookTitle))
 		{
 			return TRUE;
@@ -930,77 +930,104 @@ function deleteBookByBookID($publisherID){
 }
 
 function getBook(Book $someBook){
-		$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :ISBN");
-$stmt->bindParam(':ISBN', $theISBN);
-$theISBN = $ISBN;
-try{
-if($stmt->execute()){
-$result = $stmt->fetch();
-if(!$result){
-return FALSE;
-}
-else{
-$newBook = new Book();
-$newBook->setISBN($result['ISBN']);
-$newBook->setPublisherID($result['publisherID']);
-$newBook->settitle($result['title']);
-$newBook->setAuthor($result['author']);
-$newBook->setSubject($result['subject']);
-
-if($result['isBanned'] == 1){
-$newBook->ban();
-}
-return $newBook;
-}
-}
-else{
-return FALSE;
-}
-}
-catch(exception $e){
-return FALSE;
-}
 	
-}
+		$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :ISBN");
+		
+		$stmt->bindParam(':ISBN', $theISBN);
+		
+		$theISBN = $ISBN;
+		
+		
+		try{
+				
+			if($stmt->execute()){
+	
+			$result = $stmt->fetch();
 
-function getBookByBookID($publisherID){
-	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE publisherID = :publisherID");
-$stmt->bindParam(':publisherID', $thePublisherID);
-$thePublisherID = $publisherID;
-try
-{
- 	if($stmt->execute())
- 	{
-		$result = $stmt->fetch();
-		if(!$result){
-		return FALSE;
-		}
-	else
-	{
-			$newBook = new Book();
-			$newBook->setISBN($result['ISBN']);
-			$newBook->setPublisherID($result['publisherID']);
-			$newBook->settitle($result['title']);
-			$newBook->setAuthor($result['author']);
-			$newBook->setSubject($result['subject']);
+				if(!$result){
+		
+					return FALSE;
+				}
+	
+				else{
+		
+					$someBook = new Book();
+	
+					$someBook->setISBN($result['ISBN']);
+	
+					$someBook->setPublisherID($result['publisherID']);
+	
+					$someBook->settitle($result['title']);
+	
+					$someBook->setAuthor($result['author']);
+	
+					$someBook->setSubject($result['subject']);
 
-		if($result['isBanned'] == 1)
-		{
-			$newBook->ban();
-		}
-			return $newBook;
-	}//end else statement
-	}//end if statement
-	else
+				}//end else
+			}//end if
+		}//end try
+		
+	catch (exception $e)
 	{
 		return FALSE;
+	
 	}
-}//end try block
+
+}//end function
+	
+
+
+function getBookByBookID($publisherID)
+{
+	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE publisherID = :publisherID");
+    $stmt->bindParam(':publisherID', $thePublisherID);
+    $thePublisherID = $publisherID;
+	try
+	{
+ 		if($stmt->execute())
+ 		{
+			$result = $stmt->fetch();
+			if(!$result)
+			{
+			return FALSE;
+			}//end inner if statement
+				else
+				{
+					$newBook = new Book();
+					$newBook->setISBN($result['ISBN']);
+					$newBook->setPublisherID($result['publisherID']);
+					$newBook->settitle($result['title']);
+					$newBook->setAuthor($result['author']);
+					$newBook->setSubject($result['subject']);
+				}//end else statement
+		}//end outer if statement
+	}
+
+
+
+	
+
+//		if($result['isBanned'] == 1)
+//		{
+//			$newBook->ban();
+//		}
+//			return $newBook;
+	
+//	}//end if statement
+//	else
+//	{
+//		return FALSE;
+//	}
+//end try block
 catch(exception $e)
 	{
-	return FALSE;
+			return FALSE;
 	}
 }
+
+
+
+
 
 //no need to have update book function as we will not be updating books!
 
