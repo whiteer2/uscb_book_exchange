@@ -62,14 +62,25 @@
           <h3>Lorem Ipsum Lorem Ipsum</h3>
         
           <div class="jumbotron">
-          <p>You may now create an account with your USCB email: {uscbemail}</p>
+          <p>Add a book listing</p>
             <form>
               <div class="form-group">
-                <input type="name" class="form-control" placeholder="Enter First Name">
-                <input type="name" class="form-control" placeholder="Enter Last Name">
-                <input type="password" class="form-control" placeholder="Create Password">
+                <input type="name" class="form-control" placeholder="Enter Book Name">
+                  <!-- Drop down menu for book condition -->
+                  <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Condition <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>New</li>
+                      <li>Like New</li>
+                      <li>Good</li>
+                      <li>Fair</li>
+                    </ul>
+                  </div> 
+                  <!-- ./end of Drop down menu for book condition -->
+                <input type="name" class="form-control" placeholder="ISBN">
+                <input type="password" class="form-control" placeholder="Price">
               </div>
-              <button type="submit" class="btn btn-default">Register</button>
+              <button type="submit" class="btn btn-default">Submit</button>
             </form>
           </div>  
         </div>
