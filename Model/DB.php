@@ -591,7 +591,50 @@ function deleteListingByListingID($listingID){
 	
 }//end of the function
 		
+function deleteListingByListingIDAndUserID($listingID, $userID){
+	
+		if(!isset($listingID) || !isset($userID)){
+			
+				return FALSE;
+				
+		}
+		else{
+			
+			$stmt = $this->dbh->prepare("DELETE FROM listing WHERE listingID = :listingID AND userID = :userID LIMIT 1");
+			$stmt->bindParam(':listingID',$theListingID);
+	 		$stmt->bindParam(':userID',$theUserID);
 	 
+	 		
+	 		$theListingID = $listingID; 			
+			$theUserID = $userID;
+			
+	 		try{
+	 			if($stmt->excute())
+				
+	 			{
+	 				
+				return TRUE;
+				
+				}	
+				 		
+	 			else{
+	 				
+	 			return FALSE;
+					
+	 			}
+				
+	}//end of the try
+	
+	catch(exception $e){
+		
+		return FALSE;
+		
+	}//end of the catch 
+	
+}//end of else
+		
+	
+}//end of the function 
 	
 
 function deleteAllListingsByUserID($userID){
