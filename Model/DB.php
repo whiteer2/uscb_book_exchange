@@ -2,6 +2,7 @@
 
 require_once 'User.php';
 require_once 'Listing.php';
+require_once 'Book.php';
 
 class DB{
 
@@ -26,6 +27,7 @@ function __construct(){
 		$this->dbh =  $dbh;
 		
 	} catch (PDOException $e) {
+		echo 'error';
     	return FALSE;
 	}
 
@@ -508,9 +510,29 @@ function updateUserScheduleByEmailID($emailID, $schedule){
 
 // DB FUNCTIONS FOR ERNEST
 
+private function createListingFromResult($result){
+	
+				$foundListing = new Listing();
+				
+				$foundListing->setListingID($result['listingID']);
+				
+				$foundListing->setISBN($result['ISBN']);
+				
+				$foundListing->setUserID($result['userID']);
+				
+				$foundListing->setPrice($result['price']);
+				
+				$foundListing->setIsNegotiable($result['isNegotiable']);
+				
+				$foundListing->setDescription($result['description']);
+				
+				return $foundListing;
+	
+}//end function
+
 function insertListing(Listing $someListing){
 	
-	if(!isset($someListing->isListingSet())){
+	if(!$someListing->isListingSet()){
 	
 		return FALSE;
 		
@@ -563,7 +585,52 @@ function deleteListingByListingID($listingID){
 	 		$theListingID = $listingID; 			
 			
 	 		try{
-	 			if($stmt->excute())
+	 			if($stmt->execute())
+				
+	 			{
+	 				
+				return TRUE;
+				
+				}	
+				 		
+	 			else{
+	 				
+	 			return FALSE;
+					
+	 			}
+				
+	}//end of the try
+	
+	catch(exception $e){
+		
+		return FALSE;
+		
+	}//end of the catch 
+	
+}//end of elseup
+		
+	
+}//end of the function
+		
+function deleteListingByListingIDAndUserID($listingID, $userID){
+	
+		if(!isset($listingID) || !isset($userID)){
+			
+				return FALSE;
+				
+		}
+		else{
+			
+			$stmt = $this->dbh->prepare("DELETE FROM listing WHERE listingID = :listingID AND userID = :userID LIMIT 1");
+			$stmt->bindParam(':listingID',$theListingID);
+	 		$stmt->bindParam(':userID',$theUserID);
+	 
+	 		
+	 		$theListingID = $listingID; 			
+			$theUserID = $userID;
+			
+	 		try{
+	 			if($stmt->execute())
 				
 	 			{
 	 				
@@ -588,9 +655,7 @@ function deleteListingByListingID($listingID){
 }//end of else
 		
 	
-}//end of the function
-		
-	 
+}//end of the function 
 	
 
 function deleteAllListingsByUserID($userID){
@@ -610,7 +675,7 @@ function deleteAllListingsByUserID($userID){
 		$IDofTheUser = $userID;
 
 		try{
-	 			if($stmt->excute())				
+	 			if($stmt->execute())				
 	 			{
 	 				
 				return TRUE;
@@ -641,7 +706,7 @@ function deleteAllListingsByUserID($userID){
 //Goal fromt he looks of is for the Function to get listing by THE Listing ID
 function getListingbyListingID($listingID){
 	
-	if(!isset($userID)){
+	if(!isset($listingID)){
 		
 		return FALSE;
 		
@@ -656,7 +721,7 @@ function getListingbyListingID($listingID){
 
 		try{
 			
-			if($stmt->excute()){
+			if($stmt->execute()){
 				
 			$result = $stmt->fetch();
 	
@@ -668,7 +733,7 @@ function getListingbyListingID($listingID){
 		
 			else{
 				
-				return createListingFromResult($result);
+				return $this->createListingFromResult($result);
 				
 			}
 		}
@@ -708,7 +773,7 @@ function getListingsByUserID($userID){
 		$IDofUser = $userID;
 
 		try{
-			if($stmt -> excute()){
+			if($stmt -> execute()){
 		
 				if(!$result)
 				{
@@ -720,7 +785,7 @@ function getListingsByUserID($userID){
 				else
 				{						
 				
-					return createListingFromResult($result);
+					return $this->createListingFromResult($result);
 				
 				}
 			}
@@ -746,44 +811,28 @@ function getListingsByUserID($userID){
 }//end of function
 
 
-private function createListingFromResult($result){
-	
-				$foundListing = new Listing();
-				
-				$foundListing->setListingID($result['listingID']);
-				
-				$foundListing->setISBN($result['ISBN']);
-				
-				$foundListing->setUserID($result['userID']);
-				
-				$foundListing->setPrice($result['price']);
-				
-				$foundListing->setIsNegotiable($result['isNegotiable']);
-				
-				$foundListing->setDescription($result['description']);
-				
-				return $foundListing;
-	
-}//end function
 
-function updateListingByListingID(Listing $someListing){
+
+function updateListingWithUserID(Listing $someListing, $userID){
 	
 	if(!$someListing->isListingSet()){
 		
 		return FALSE;
 		
 	}
-	else{		
+	else{
 		
-		$stmt -> $this->dbh->prepare("UPDATE listing SET (listingID = :theListingID, ISBN = :theISBN, userID = :theUserID, price = :thePrice, isNegotiable = :theIsNegotiable, description = :theDescription) WHERE listingID = :someListingID");
+		//$someListing->printlisting();		
+		
+		$stmt = $this->dbh->prepare("UPDATE listing SET price = :thePrice, isNegotiable = :theIsNegotiable, description = :theDescription WHERE listingID = :someListingID AND userID = :theUserID");
 	
 		//"INSERT INTO listing ( ListingID , ISBN , userID  , price , isNegotiable , description ) VALUES ( :newListing , :newISBN , :newUserID , :newPrice , :newisNegotiable, :newDescription )
 	
-		$stmt ->bindParam(':theListingID',$IDofListing);
-	
-		$stmt ->bindParam(':theISBN',$theISBN);
-	
-		$stmt ->bindParam(':theUserID',$theUserID);
+		// $stmt ->bindParam(':theListingID',$IDofListing);
+// 	
+		// $stmt ->bindParam(':theISBN',$theISBN);
+// 	
+		// $stmt ->bindParam(':theUserID',$theUserID);
 	
 		$stmt ->bindParam(':thePrice',$thePrice);
 	
@@ -792,14 +841,17 @@ function updateListingByListingID(Listing $someListing){
 		$stmt ->bindParam(':theDescription',$theDescription);
 	
 		$stmt ->bindParam(':someListingID',$someListingID);	
+		
+		$stmt ->bindParam(':theUserID',$theUserID);	
+		
 	
 		
 	
-		$IDofListing = $someListing->getListingID();
-	
-		$theISBN = $someListing->getISBN();
-	
-		$theUserID = $someListing->getUserID();
+		// $IDofListing = $someListing->getListingID();
+// 	
+		// $theISBN = $someListing->getISBN();
+// 	
+		// $theUserID = $someListing->getUserID();
 	
 		$thePrice = $someListing->getPrice();
 	
@@ -809,9 +861,11 @@ function updateListingByListingID(Listing $someListing){
 	
 		$someListingID = $someListing->getListingID();	
 	
+		$theUserID = $userID;
+		
 		try{
 		
-			if($stmt->excute()){
+			if($stmt->execute()){
 			
 				return TRUE;
 			
@@ -843,50 +897,250 @@ function searchListings($searchQuery){
 
 //DB FUNCTIONS FOR ZACH
 
-function insertBook(Book $newBook){
+function insertBook(book $newBook){
 	
-}
+	$isBookSet = $newBook->isBookSet();
+	
+	if(!$isBookSet){
+		
+		return false;
+		
+	}
+	
+	else{
+		
+	//Fixed this SQL query - Bill Glesias 3/22/15
+	$stmt = $this->dbh->prepare("INSERT INTO book ( ISBN, author, subject, publisherID, title ) VALUES ( :ISBN , :author , :subject , :publisherID , :title )");
+	
+	$stmt->bindParam(':ISBN', $ISBN);
+	$stmt->bindParam(':author', $author);
+	$stmt->bindParam(':subject', $subject);
+	$stmt->bindParam(':publisherID', $publisherID);
+	$stmt->bindParam(':title', $title);
+	
+	$ISBN = $newBook->getISBN();
+	$author = $newBook->getAuthor();
+	$subject = $newBook->getSubject();
+	$publisherID = $newBook->getPublisherID();
+	$title = $newBook->getTitle();
+
+	
+	try{
+		if($stmt->execute()){
+			
+			return TRUE;
+			
+		}//end if
+		
+		else{
+			
+			return FALSE;
+			
+		}//end else
+		
+	}//end try
+	catch(exception $e){
+		
+		return FALSE;
+		
+	}//end catch
+  }//end else
+
+}//end function
 
 function deleteBook(Book $someBook){
 	
-}
-
-function deleteBookByBookID($bookID){
+	$isBookSet = $someBook->isBookSet();
 	
-}
+	if(!$isBookSet){
+		
+		return false;
+		
+	}
+	
+	else{
+		
+		return deleteBookByISBN($someBook->getISBN());
+		
+		
+	}//end else
+	
+	
+}//end function
+
+function deleteBookByISBN($someISBN){
+			
+			
+		if(!isset($someISBN)){
+				
+			return FALSE;
+			
+		}
+		else {
+				
+			$stmt = $this->dbh->prepare("DELETE FROM book WHERE ISBN = :theISBN LIMIT 1");
+			$stmt->bindParam(':theISBN', $theISBN);
+	
+			$theISBN = $someISBN;
+	
+			try
+			{
+					
+				if($stmt->execute())
+			
+				{
+				
+					return TRUE;
+			
+				}
+		
+				else
+		
+				{
+					
+					return FALSE;
+		
+				}
+	
+			}//end try
+	
+		catch(exception $e)
+		
+		{
+			
+		return FALSE;
+	
+		}	
+	
+	}//end else
+		
+		
+}//end function
 
 function getBook(Book $someBook){
 	
-}
-
-function getBookByBookID($bookID){
+	if(!$someBook->isBookSet()){
+		
+		return false;
+		
+	}
+	else{
 	
+		$stmt = $this->dbh->prepare("SELECT * FROM book WHERE bookID = :bookID LIMIT 1");
+		$stmt->bindParam(':bookID', $IDofBook);
+
+		//this bound parameter is not correct. 
+		$IDofBook = $someBook->getISBN();
+
+		try{
+			
+			if($stmt->execute()){
+				
+				$result = $stmt->fetch();
+				
+				if(!$result){
+				
+					return FALSE;
+				
+				}//end if
+		
+				else{
+					
+					
+					$newBook = new Book();
+
+					$newBook->setISBN($result['ISBN']);
+
+					$newBook->setPublisherID($result['publisherID']);
+
+					$newBook->settitle($result['title']);
+
+					$newBook->setAuthor($result['author']);
+
+					$newBook->setSubject($result['subject']);
+					
+				
+					return $newBook;
+				}//end else
+			}//;end if
+			
+			else{
+				
+				return FALSE;
+			}
+			
+		}//end try
+		
+	catch(exception $e){
+		
+		return FALSE;
+
+	}//end catch.
+}//end else
+	
+}//end function
+
+
+
+function getBookByISBN($someISBN)
+{
+	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :publisherID");
+    $stmt->bindParam(':publisherID', $thePublisherID);
+    $thePublisherID = $publisherID;
+	try
+	{
+ 		if($stmt->execute())
+ 		{
+			$result = $stmt->fetch();
+			if(!$result)
+			{
+			return FALSE;
+			}//end inner if statement
+				else
+				{
+					$newBook = new Book();
+					$newBook->setISBN($result['ISBN']);
+					$newBook->setPublisherID($result['publisherID']);
+					$newBook->settitle($result['title']);
+					$newBook->setAuthor($result['author']);
+					$newBook->setSubject($result['subject']);
+				}//end else statement
+		}//end outer if statement
+	}
+
+	catch(exception $e)
+	{
+			return FALSE;
+	}
 }
 
 //no need to have update book function as we will not be updating books!
 
 function insertPublisher($publisherName){
 	
-	if(!isset($publisherName)){
-		
+	if(!isset($publisherName))
+	{
 		return FALSE;
-		
 	}
 	
-	$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
-	$stmt->bindParam(':publisherName', $thePublisherName);
+		$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
+		$stmt->bindParam(':publisherName', $thePublisherName);
+			
+		$thePublisherName = $publisherName;
 	
-	$thePublisherName = $publisherName;
-	
-	try{
-		if($stmt->execute()){
+	try
+	{
+		if($stmt->execute())
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	catch(exception $e){
+	catch(exception $e)
+	{
 		return FALSE;
 	}
 	
@@ -895,10 +1149,9 @@ function insertPublisher($publisherName){
 function deletePublisherByPublisherName($publisherName){
 	
 	
-	if(!isset($publisherName)){
-		
-		return FALSE;
-		
+	if(!isset($publisherName))
+	{	
+		return FALSE;	
 	}
 	
 	$stmt = $this->dbh->prepare("DELETE FROM publisher WHERE publisher = :publisherName LIMIT 1");
@@ -906,15 +1159,19 @@ function deletePublisherByPublisherName($publisherName){
 	
 	$thePublisherName = $publisherName;
 	
-	try{
-		if($stmt->execute()){
+	try
+	{
+		if($stmt->execute())
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	catch(exception $e){
+	catch(exception $e)
+	{
 		return FALSE;
 	}
 	
