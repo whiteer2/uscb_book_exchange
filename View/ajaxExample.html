@@ -73,34 +73,34 @@ $(document).ready(function(){
 	// });
 	
 	
-	var someListingID = 3;
-		
-	window.alert("trying some ajax");
-	
-	$.ajax({
-		
-		        
-        //the url of the request.  to have a discussion on how we want to store the url info,
-  		url: connectionString + '/deleteListing.php',
-  		
-  		//the data you are passing the request
-  		data: {listingID : someListingID},
-  		
-  		//the default method is get
-  		method: 'POST',
-  		
-  		//if the call is a success
-  		success: function(data){
-  			
-  			$('#div1').text(data);
-  			
-  		},
-  		
-  		//if we had an error
-  		error: function( jqXHR, textStatus, errorThrown){
-  			 $('#div1').text(textStatus);
-       }
-	});
+	// var someListingID = 3;
+// 		
+	// window.alert("trying some ajax");
+// 	
+	// $.ajax({
+// 		
+// 		        
+        // //the url of the request.  to have a discussion on how we want to store the url info,
+  		// url: connectionString + '/deleteListing.php',
+//   		
+  		// //the data you are passing the request
+  		// data: {listingID : someListingID},
+//   		
+  		// //the default method is get
+  		// method: 'POST',
+//   		
+  		// //if the call is a success
+  		// success: function(data){
+//   			
+  			// $('#div1').text(data);
+//   			
+  		// },
+//   		
+  		// //if we had an error
+  		// error: function( jqXHR, textStatus, errorThrown){
+  			 // $('#div1').text(textStatus);
+       // }
+	// });
 	
 	
 	
