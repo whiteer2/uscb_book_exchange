@@ -1,97 +1,77 @@
 <?php
 require_once 'Model/DB.php';
+require_once 'Model/Listing.php';
+
 
 $theUser = isset($_SESSION['user']);
 $price =  isset($_POST['price']);
 $isNegotiable = isset($_POST['isNegotiable']);
 $description = isset($_POST['description']);
-$listing = isset($_POST['listing']);
+$listingID= isset($_POST['listingID']);
 
 
-	if($theUser)
+	if($theUser && $listingID)
 	{
+		$listingID= $_POST['listingID'];
 
-	$listingToUpdate = getListingbyListingID($listingID);
+		$listingToUpdate = getListingbyListingID($listingID);
 
-	if(!$listingToUpdate){
+		if(!$listingToUpdate){
 		
-	echo "listing doesn't exist";
+			echo "listing doesn't exist";
 	
-	}
+		}//end if
 	
-	else
-	{
+		else
+		{
+			
+			
 	
-		 if($price)
-	 	{
+			 if($price)
+	 			{
 	 		
-			$price = $_POST['price'];
+				$listingToUpdate->setPrice($_POST['price']);
 	 	
-	 	}
-		 else{
+			 	}
+		     if($isNegotiable)
+				 {
 		 	
-			$price = 0;
+				$listingToUpdate->setIsNegotiable($_POST['isNegotiable']);
+		
+	 			}
+		    if($description)
+	 			{
+	 	
+				$listingToUpdate->setIsNegotiable($_POST['description']);
+		
+	 			}
+		 	  	 
+	 		
+	 		
+	 		if(!$updateListing($listingToUpdate))
+	 			{
+	 	
+	 			echo 'could not update listing';
+	 
+				 }
+		
+	 		else 
+	 		{
+	 	
+			echo 'listing updated sucessfully';	
+		
+	 		}
+	 
+	}//end else
+}// end else 
+
+else 
+{
+	
+	echo 'Please log into account to update Listing';
 			
-		 }
-		 
-	 
-		 if($isNegotiable)
-		 {
-		 	
-			$isNegotiable = $_POST['isNegotiable'];
-		
-	 	}
-		 else{
-		 	
-			$isNegotiable = 0;
-			
-		 }
-		 
-	 
-		 if($description)
-	 	{
-	 	
-		$description = $_POST['description'];
-		
-	 	}
-		 else{
-		 	
-		 	$description = "";
-			
-		 }
-	 
-	  if($listing)
-	 	{
-	 	
-		$listing = $_POST['listing'];
-		
-	 	}
-		 else{
-		 	
-		 	$listing = 0;
-			
-		 }
-	 
-	 	if(!$updateListing($listingToUpdate))
-	 	{
-	 	
-	 	echo 'could not update listing';
-	 
-		 }
-		
-	 	else 
-	 	{
-	 	
-		echo 'listing updated sucessfully';	
-		
-	 	}
-	 
-	}
-}// end of 
-	 else 
-		 {
-		 	echo 'lsisting updated sucessfully';
-		 }// end of else
-	 
-	 
-	 
+ }// end of else
+	 	 
+
+?>
+

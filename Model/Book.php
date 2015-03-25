@@ -40,7 +40,7 @@ class Book{
 	}
 	
 	function getSubject(){
-		
+	
 		return $this->subject;
 		
 	}
@@ -57,7 +57,7 @@ class Book{
 		
 	}
 	
-	function settitle(){
+	function setTitle($newTitle){
 		
 		$this->title = $newTitle;
 		
@@ -75,7 +75,7 @@ class Book{
 		
 	}
 	
-	function isBookSet(){
+function isBookSet(){
 		
 		if(!isset($this->ISBN)){
 			return FALSE;
@@ -105,8 +105,9 @@ class Book{
 		print_r($this);
 		
 	}
-		
-}
+
+	
+}//end class book
 
 
 ?>

@@ -587,7 +587,7 @@ function deleteListingByListingID($listingID){
 		
 	}//end of the catch 
 	
-}//end of else
+}//end of elseup
 		
 	
 }//end of the function
@@ -811,7 +811,7 @@ private function createListingFromResult($result){
 	
 }//end function
 
-function updateListingByListingID(Listing $someListing){
+function updateListing(Listing $someListing){
 	
 	if(!$someListing->isListingSet()){
 		
@@ -888,10 +888,7 @@ function searchListings($searchQuery){
 
 //DB FUNCTIONS FOR ZACH
 
-function insertBook(Book $newBook){
-	
-	//this method isBookSet is undefined in the book class. This method needs to be defined!!!!! You are alsop passing it newbook, not a variable called book. 
-	//anytime you try to reference an object named book, you are going to throw errors
+function insertBook(book $newBook){
 	
 	$isBookSet = $newBook->isBookSet();
 	
@@ -944,12 +941,72 @@ function insertBook(Book $newBook){
 
 function deleteBook(Book $someBook){
 	
-}
-
-function deleteBookByBookID($bookID){
+	$isBookSet = $someBook->isBookSet();
 	
+	if(!$isBookSet){
 		
-}
+		return false;
+		
+	}
+	
+	else{
+		
+		return deleteBookByISBN($someBook->getISBN());
+		
+		
+	}//end else
+	
+	
+}//end function
+
+function deleteBookByISBN($someISBN){
+			
+			
+		if(!isset($someISBN)){
+				
+			return FALSE;
+			
+		}
+		else {
+				
+			$stmt = $this->dbh->prepare("DELETE FROM book WHERE ISBN = :theISBN LIMIT 1");
+			$stmt->bindParam(':theISBN', $theISBN);
+	
+			$theISBN = $someISBN;
+	
+			try
+			{
+					
+				if($stmt->execute())
+			
+				{
+				
+					return TRUE;
+			
+				}
+		
+				else
+		
+				{
+					
+					return FALSE;
+		
+				}
+	
+			}//end try
+	
+		catch(exception $e)
+		
+		{
+			
+		return FALSE;
+	
+		}	
+	
+	}//end else
+		
+		
+}//end function
 
 function getBook(Book $someBook){
 	
@@ -993,14 +1050,7 @@ function getBook(Book $someBook){
 
 					$newBook->setSubject($result['subject']);
 					
-					
-					//why the hell would we be banning a book? We arent dealing with 50 Shades of Gay here...
-					// if($result['isBanned'] == 1){
-						
-						// $newBook->ban();
-						
-						// }
-
+				
 					return $newBook;
 				}//end else
 			}//;end if
@@ -1021,34 +1071,67 @@ function getBook(Book $someBook){
 	
 }//end function
 
-function getBookByBookID($bookID){
-	
+
+
+function getBookByISBN($someISBN)
+{
+	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :publisherID");
+    $stmt->bindParam(':publisherID', $thePublisherID);
+    $thePublisherID = $publisherID;
+	try
+	{
+ 		if($stmt->execute())
+ 		{
+			$result = $stmt->fetch();
+			if(!$result)
+			{
+			return FALSE;
+			}//end inner if statement
+				else
+				{
+					$newBook = new Book();
+					$newBook->setISBN($result['ISBN']);
+					$newBook->setPublisherID($result['publisherID']);
+					$newBook->settitle($result['title']);
+					$newBook->setAuthor($result['author']);
+					$newBook->setSubject($result['subject']);
+				}//end else statement
+		}//end outer if statement
+	}
+
+	catch(exception $e)
+	{
+			return FALSE;
+	}
 }
 
 //no need to have update book function as we will not be updating books!
 
 function insertPublisher($publisherName){
 	
-	if(!isset($publisherName)){
-		
+	if(!isset($publisherName))
+	{
 		return FALSE;
-		
 	}
 	
-	$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
-	$stmt->bindParam(':publisherName', $thePublisherName);
+		$stmt = $this->dbh->prepare("INSERT INTO publisher(publisher) VALUES (:publisherName)");
+		$stmt->bindParam(':publisherName', $thePublisherName);
+			
+		$thePublisherName = $publisherName;
 	
-	$thePublisherName = $publisherName;
-	
-	try{
-		if($stmt->execute()){
+	try
+	{
+		if($stmt->execute())
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	catch(exception $e){
+	catch(exception $e)
+	{
 		return FALSE;
 	}
 	
@@ -1057,10 +1140,9 @@ function insertPublisher($publisherName){
 function deletePublisherByPublisherName($publisherName){
 	
 	
-	if(!isset($publisherName)){
-		
-		return FALSE;
-		
+	if(!isset($publisherName))
+	{	
+		return FALSE;	
 	}
 	
 	$stmt = $this->dbh->prepare("DELETE FROM publisher WHERE publisher = :publisherName LIMIT 1");
@@ -1068,15 +1150,19 @@ function deletePublisherByPublisherName($publisherName){
 	
 	$thePublisherName = $publisherName;
 	
-	try{
-		if($stmt->execute()){
+	try
+	{
+		if($stmt->execute())
+		{
 			return TRUE;
 		}
-		else{
+		else
+		{
 			return FALSE;
 		}
 	}
-	catch(exception $e){
+	catch(exception $e)
+	{
 		return FALSE;
 	}
 	
