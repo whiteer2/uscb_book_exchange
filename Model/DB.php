@@ -843,13 +843,13 @@ function searchListings($searchQuery){
 
 //DB FUNCTIONS FOR ZACH
 
-function insertBook(Book $newBook){
+function insertBook(book $newBook){
 	
 	$isBookSet = $newBook->isBookSet();
 	
 	if(!$isBookSet)
 	{
-		//echo 'this shit isnt set';
+		
 		return false;
 	}
 	else
@@ -890,20 +890,21 @@ function insertBook(Book $newBook){
 	
 }
 
-function deleteBook(Book $someBook){
+function deleteBook(book $someBook){
 	
-	$isBookSet = $someBook->isUserSet();
-	
-	if(!$isBookSet)
-	{
-		echo "the book is not set";
-		return false;
+	if(!isset($someBook))
+	{	
+		return FALSE;	
 	}
-	else
-	{
-		$bookTitle = $someBook->getTitle();
 	
-		if($this->deleteBookByBookTitle($bookTitle))
+	$stmt = $this->dbh->prepare("DELETE FROM book WHERE title = :title LIMIT 1");
+	$stmt->bindParam(':title', $theTitle);
+	
+	$theTitle = $title;
+	
+	try
+	{
+		if($stmt->execute())
 		{
 			return TRUE;
 		}
@@ -911,30 +912,43 @@ function deleteBook(Book $someBook){
 		{
 			return FALSE;
 		}
-    } 
-	
+	}
+	catch(exception $e)
+	{
+		return FALSE;
+	}	
 }
 
-function deleteBookByBookID($publisherID){
+function deleteBookByPublisherID($publisherID){
 	
-	$isBookSet = $publisherID->isUserSet();
+	$isBookSet = $publisherID->isBookSet();
 	if(!$isBookSet)
 	{
 		return false;
 	}
-	else
-	{
-	$publisherID = $book->getBookID();
+	else {
+	echo 'so far so good';
+	$stmt = $this->dbh->prepare("DELETE FROM book WHERE publisherID = :publisherID LIMIT 1");
+	$stmt->bindParam(':publisherID', $thePublisherID);
 	
-		if($this->deleteBookByBookID($publisherID))
+	$thePublisherID = $publisherID;
+	}
+	try
+	{
+		if($stmt->execute())
 		{
 			return TRUE;
 		}
-	else
+		else
+		{
+			return FALSE;
+		}
+	}
+	catch(exception $e)
 	{
 		return FALSE;
 	}
- } 
+	
 	
 }
 
@@ -1011,28 +1025,12 @@ function getBookByBookID($publisherID)
 				}//end else statement
 		}//end outer if statement
 	}
-//		if($result['isBanned'] == 1)
-//		{
-//			$newBook->ban();
-//		}
-//			return $newBook;
-//	
-//	}//end if statement
-//	else
-//	{
-//		return FALSE;
-//	}
-//end try block
-catch(exception $e)
-{
+
+	catch(exception $e)
+	{
 			return FALSE;
+	}
 }
-}
-
-
-
-
-
 
 //no need to have update book function as we will not be updating books!
 
