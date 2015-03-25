@@ -8,18 +8,19 @@ $theUser = isset($_SESSION['user']);
 
 //FOR TESTING PURPOSES ONLY, COMMENT OUT FOR LIVE
 //$listingID = 1;
-//$userID = 1;
+//$theUser = 1;
 
 if($listingID && $theUser){
 	
 	//FOR TESTING PURPOSES ONLY, COMMENT OUT FOR LIVE
 	//$listingID = 3;
-	//$userID = 9;
+	//$userID = 5;
 	
 	$listingID = $_POST['listingID'];
 	$theUser = $_SESSION['userID'];
 	
 	$userID = $theUser->getUserID();
+		
 	
 	$dbh = new DB();
 	
@@ -37,7 +38,7 @@ if($listingID && $theUser){
 else
 	 {
 	
-	//do nothing
+	echo ' please log in to continue';
 	
    }
 

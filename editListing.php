@@ -9,12 +9,24 @@ $isNegotiable = isset($_POST['isNegotiable']);
 $description = isset($_POST['description']);
 $listingID= isset($_POST['listingID']);
 
+//FOR TEST PURPOSES ONLY SO WE DO NOT HAVE TO VERIFY USER FOR MODULE
+//$theUser = 1;
 
 	if($theUser && $listingID)
 	{
 		$listingID= $_POST['listingID'];
-
-		$listingToUpdate = getListingbyListingID($listingID);
+		
+		$theUser = $_SESSION['user'];
+		
+		$userID = $theUser->getUserID();
+		
+		//FOR TEST PURPOSES ONLY
+		//$userID = 5;
+		
+		$dbh = new DB();
+		
+		
+		$listingToUpdate = $dbh->getListingbyListingID($listingID);
 
 		if(!$listingToUpdate){
 		
@@ -42,13 +54,13 @@ $listingID= isset($_POST['listingID']);
 		    if($description)
 	 			{
 	 	
-				$listingToUpdate->setIsNegotiable($_POST['description']);
+				$listingToUpdate->setDescription($_POST['description']);
 		
 	 			}
 		 	  	 
 	 		
 	 		
-	 		if(!$updateListing($listingToUpdate))
+	 		if(!$dbh->updateListingWithUserID($listingToUpdate, $userID))
 	 			{
 	 	
 	 			echo 'could not update listing';
@@ -63,7 +75,7 @@ $listingID= isset($_POST['listingID']);
 	 		}
 	 
 	}//end else
-}// end else 
+}// end if 
 
 else 
 {

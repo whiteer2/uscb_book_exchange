@@ -510,6 +510,26 @@ function updateUserScheduleByEmailID($emailID, $schedule){
 
 // DB FUNCTIONS FOR ERNEST
 
+private function createListingFromResult($result){
+	
+				$foundListing = new Listing();
+				
+				$foundListing->setListingID($result['listingID']);
+				
+				$foundListing->setISBN($result['ISBN']);
+				
+				$foundListing->setUserID($result['userID']);
+				
+				$foundListing->setPrice($result['price']);
+				
+				$foundListing->setIsNegotiable($result['isNegotiable']);
+				
+				$foundListing->setDescription($result['description']);
+				
+				return $foundListing;
+	
+}//end function
+
 function insertListing(Listing $someListing){
 	
 	if(!$someListing->isListingSet()){
@@ -655,7 +675,7 @@ function deleteAllListingsByUserID($userID){
 		$IDofTheUser = $userID;
 
 		try{
-	 			if($stmt->excute())				
+	 			if($stmt->execute())				
 	 			{
 	 				
 				return TRUE;
@@ -686,7 +706,7 @@ function deleteAllListingsByUserID($userID){
 //Goal fromt he looks of is for the Function to get listing by THE Listing ID
 function getListingbyListingID($listingID){
 	
-	if(!isset($userID)){
+	if(!isset($listingID)){
 		
 		return FALSE;
 		
@@ -701,7 +721,7 @@ function getListingbyListingID($listingID){
 
 		try{
 			
-			if($stmt->excute()){
+			if($stmt->execute()){
 				
 			$result = $stmt->fetch();
 	
@@ -713,7 +733,7 @@ function getListingbyListingID($listingID){
 		
 			else{
 				
-				return createListingFromResult($result);
+				return $this->createListingFromResult($result);
 				
 			}
 		}
@@ -753,7 +773,7 @@ function getListingsByUserID($userID){
 		$IDofUser = $userID;
 
 		try{
-			if($stmt -> excute()){
+			if($stmt -> execute()){
 		
 				if(!$result)
 				{
@@ -765,7 +785,7 @@ function getListingsByUserID($userID){
 				else
 				{						
 				
-					return createListingFromResult($result);
+					return $this->createListingFromResult($result);
 				
 				}
 			}
@@ -791,44 +811,28 @@ function getListingsByUserID($userID){
 }//end of function
 
 
-private function createListingFromResult($result){
-	
-				$foundListing = new Listing();
-				
-				$foundListing->setListingID($result['listingID']);
-				
-				$foundListing->setISBN($result['ISBN']);
-				
-				$foundListing->setUserID($result['userID']);
-				
-				$foundListing->setPrice($result['price']);
-				
-				$foundListing->setIsNegotiable($result['isNegotiable']);
-				
-				$foundListing->setDescription($result['description']);
-				
-				return $foundListing;
-	
-}//end function
 
-function updateListing(Listing $someListing){
+
+function updateListingWithUserID(Listing $someListing, $userID){
 	
 	if(!$someListing->isListingSet()){
 		
 		return FALSE;
 		
 	}
-	else{		
+	else{
 		
-		$stmt -> $this->dbh->prepare("UPDATE listing SET (listingID = :theListingID, ISBN = :theISBN, userID = :theUserID, price = :thePrice, isNegotiable = :theIsNegotiable, description = :theDescription) WHERE listingID = :someListingID");
+		//$someListing->printlisting();		
+		
+		$stmt = $this->dbh->prepare("UPDATE listing SET price = :thePrice, isNegotiable = :theIsNegotiable, description = :theDescription WHERE listingID = :someListingID AND userID = :theUserID");
 	
 		//"INSERT INTO listing ( ListingID , ISBN , userID  , price , isNegotiable , description ) VALUES ( :newListing , :newISBN , :newUserID , :newPrice , :newisNegotiable, :newDescription )
 	
-		$stmt ->bindParam(':theListingID',$IDofListing);
-	
-		$stmt ->bindParam(':theISBN',$theISBN);
-	
-		$stmt ->bindParam(':theUserID',$theUserID);
+		// $stmt ->bindParam(':theListingID',$IDofListing);
+// 	
+		// $stmt ->bindParam(':theISBN',$theISBN);
+// 	
+		// $stmt ->bindParam(':theUserID',$theUserID);
 	
 		$stmt ->bindParam(':thePrice',$thePrice);
 	
@@ -837,14 +841,17 @@ function updateListing(Listing $someListing){
 		$stmt ->bindParam(':theDescription',$theDescription);
 	
 		$stmt ->bindParam(':someListingID',$someListingID);	
+		
+		$stmt ->bindParam(':theUserID',$theUserID);	
+		
 	
 		
 	
-		$IDofListing = $someListing->getListingID();
-	
-		$theISBN = $someListing->getISBN();
-	
-		$theUserID = $someListing->getUserID();
+		// $IDofListing = $someListing->getListingID();
+// 	
+		// $theISBN = $someListing->getISBN();
+// 	
+		// $theUserID = $someListing->getUserID();
 	
 		$thePrice = $someListing->getPrice();
 	
@@ -854,9 +861,11 @@ function updateListing(Listing $someListing){
 	
 		$someListingID = $someListing->getListingID();	
 	
+		$theUserID = $userID;
+		
 		try{
 		
-			if($stmt->excute()){
+			if($stmt->execute()){
 			
 				return TRUE;
 			
