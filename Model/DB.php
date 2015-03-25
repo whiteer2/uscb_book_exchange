@@ -870,18 +870,19 @@ function insertBook(Book $newBook){
 	$bookTitle = $newBook->getTitle();
 
 	
-	try{
-	if($stmt->execute()){
-	return TRUE;
-   }
-	else{
-		//echo ' no error, but something wrong';
-	return FALSE;
+	try
+	{
+		if($stmt->execute())
+			{
+			return TRUE;
+   			}
+		else
+		{
+			return FALSE;
+		}
 	}
-	}
-	catch(exception $e){
-		
-		//echo 'we got a problem';
+	catch(exception $e)
+	{	
 	return FALSE;
 	}
  } 
@@ -895,11 +896,13 @@ function deleteBook(Book $someBook){
 	
 	if(!$isBookSet)
 	{
+		echo "the book is not set";
 		return false;
 	}
 	else
 	{
 		$bookTitle = $someBook->getTitle();
+	
 		if($this->deleteBookByBookTitle($bookTitle))
 		{
 			return TRUE;
@@ -1008,17 +1011,12 @@ function getBookByBookID($publisherID)
 				}//end else statement
 		}//end outer if statement
 	}
-
-
-
-	
-
 //		if($result['isBanned'] == 1)
 //		{
 //			$newBook->ban();
 //		}
 //			return $newBook;
-	
+//	
 //	}//end if statement
 //	else
 //	{
@@ -1026,10 +1024,11 @@ function getBookByBookID($publisherID)
 //	}
 //end try block
 catch(exception $e)
-	{
+{
 			return FALSE;
-	}
 }
+}
+
 
 
 

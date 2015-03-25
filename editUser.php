@@ -1,12 +1,13 @@
 <?php
 
-// require_once "Model/DB.php";
-// require_once "model/Book.php";
-// 
-// 
-// $dbh = new DB();
-// 
-// $someBook = new Book();
+ require_once "Model/DB.php";
+ require_once "model/Book.php";
+ 
+  
+ $dbh = new DB();
+ 
+ //$someBook = new Book();
+ 
 // 
 // $someBook->setAuthor("zach is a bitch");
 // 

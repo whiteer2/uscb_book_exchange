@@ -40,7 +40,7 @@ class Book{
 	}
 	
 	function getSubject(){
-		
+	
 		return $this->subject;
 		
 	}
@@ -114,7 +114,7 @@ class Book{
 	
 
 		
-}//ed class book
+}//end class book
 
 
 ?>
