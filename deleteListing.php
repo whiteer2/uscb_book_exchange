@@ -2,18 +2,23 @@
 
 
 require_once 'Model/DB.php';
+//require_once 'Model/User.php'; not needed
+//$listingID = isset($_POST['listingID']);
+//$userID = isset($_POST['userID']);
 
-$listingID = isset($_POST['listingID']);
-$userID = isset($_POST['userID']);
-
-if($listingID && $useriD){
+$listingID = 1;
+$userID = 1;
+if($listingID && $userID){
 	
-	$listingID = $_POST['listingID'];
-	$userID = $_POST['userID'];
+	$listingID = 2;
+	
+	
+	$userID =9;
+	
 	
 	$dbh = new DB();
 	
-	if($dbh->deleteListingByListingIDAndUserID($listingID, $userID)){
+	if($dbh -> deleteListingByListingIDAndUserID($listingID, $userID)){
 		
 		echo 'listing deleted successfully';
 		
@@ -28,7 +33,7 @@ else
 	 {
 	
 	//do nothing
-	
+	echo 'do nothing make sure it works';
    }
 
 
