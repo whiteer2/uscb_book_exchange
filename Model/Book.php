@@ -40,7 +40,7 @@ class Book{
 	}
 	
 	function getSubject(){
-		
+	
 		return $this->subject;
 		
 	}
@@ -57,7 +57,7 @@ class Book{
 		
 	}
 	
-	function settitle(){
+	function setTitle($newTitle){
 		
 		$this->title = $newTitle;
 		
@@ -74,8 +74,40 @@ class Book{
 		$this->subject = $newSubject;
 		
 	}
+	
+function isBookSet(){
 		
-}
+		if(!isset($this->ISBN)){
+			return FALSE;
+		}
+		
+		if(!isset($this->publisherID)){
+			return FALSE;
+		}
+		
+		if(!isset($this->title)){
+			return FALSE;
+		}
+				
+		if(!isset($this->author)){
+			return FALSE;
+		}
+		if(!isset($this->subject)){
+			return FALSE;
+		}
+				
+		return TRUE;
+		
+	}
+	
+	function printBook(){
+		
+		print_r($this);
+		
+	}
+
+	
+}//end class book
 
 
 ?>
