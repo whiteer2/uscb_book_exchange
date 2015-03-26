@@ -4,7 +4,12 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
+	
+
     $("#SOMEBUTTON").click(function(){
+    	
+    	//disables the button to prevent against spaming
+    	$('#SOMEBUTTON').attr('disabled', 'disabled');
     	
     	var connectionString = 'http://localhost:8080/uscbtextbookexchange';
     	
@@ -12,30 +17,32 @@ $(document).ready(function(){
         var someEmail = 'glesias@email.sc.edu';
         
         
-        //javascript ajax to send verification email
-        // $.ajax({
-//         
-        // //the url of the request.  to have a discussion on how we want to store the url info,
-  		// url: connectionString + '/verifyEmailP1.php',
-//   		
-  		// //the data you are passing the request
-  		// data: {email : someEmail},
-//   		
-  		// //the default method is get
-  		// method: 'GET',
-//   		
-  		// //if the call is a success
-  		// success: function(data){
-//   			
-  			// $('#div1').text(data);
-//   			
-  		// },
-//   		
-  		// //if we had an error
-  		// error: function( jqXHR, textStatus, errorThrown){
-  			 // $('#div1').text(textStatus);
-       // }
-	// });
+       // javascript ajax to send verification email
+        $.ajax({
+        
+        //the url of the request.  to have a discussion on how we want to store the url info,
+  		url: connectionString + '/verifyEmailP1.php',
+  		
+  		//the data you are passing the request
+  		data: {email : someEmail},
+  		
+  		//the default method is get
+  		method: 'GET',
+  		
+  		//if the call is a success
+  		success: function(data){
+  			
+  			$('#div1').text(data);
+  			
+  		},
+  		
+  		//if we had an error
+  		error: function( jqXHR, textStatus, errorThrown){
+  			 $('#div1').text(textStatus);
+       }
+	});
+	
+	
 	
 	//javascript ajax to send to editListing.php
 	

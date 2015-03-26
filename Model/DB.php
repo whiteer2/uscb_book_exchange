@@ -27,7 +27,7 @@ function __construct(){
 		$this->dbh =  $dbh;
 		
 	} catch (PDOException $e) {
-		echo 'error';
+		//echo 'error';
     	return FALSE;
 	}
 
