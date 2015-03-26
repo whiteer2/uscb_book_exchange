@@ -89,6 +89,7 @@ class User{
 	function logout(){
 		session_destroy();
 		$this->isLoggedIn = 0;
+		return TRUE;
 	}
 	
 	function isUserSet(){

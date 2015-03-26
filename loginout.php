@@ -6,50 +6,73 @@ include_once 'Model/Password.php';
 //login/logout module for zach to code
 $email = isset($_POST['email']);
 $password = isset($_POST['password']);
-$logoutSet = isset($_POST['logout']);
-$logoutStatus = $_POST['logout'];
+$logout = isset($_GET['logout']);
 
+$theUser = isset($_SESSION['user']);
 
-if($email && $password)
-{
-	
-$email = $_POST['email'];
-$password = $_POST['password'];
-	
- $pwHash = Password::hashPassword($password);
- $user = $dbh->getUserByEmailID($emailID);
- if(!$user)
- {
- 	echo 'incorrect email or password';
-	
- }
- else {
- 	
- 		$user = new User();
-	 
-     if($user->getPasswordHash() = $pwHash)
-	 {
-	 	
-	 	$user->login();
-		//redirect to html page
-		header("Location:http//www.uscbtextbookechange.com/Account");
-		
-	 }
-	 else {
-	 	
-		 echo 'incorrect user name and password';
-	 	}
-	 
- }
+if ($email && $password && !$theUser) {
+
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+
+	$dbh = new DB();
+
+	$emailID = $dbh -> getEmailIDByEmailName($email);
+
+	//user account does not exist
+	if (!$emailID) {
+
+		echo 'Error with username or password. Please re-enter credentials to log in.';
+
+	} else {
+
+		$userToLogIn = $dbh -> getUserByEmailID($emailID);
+
+		if (!$userToLogIn) {
+
+			echo ' Error with username or password. Please re-enter credentials to log in.';
+
+		} else {
+
+			$pwHash = Password::hashPassword($password);
+
+			$accountPWHash = $userToLogIn -> getPasswordHash();
+
+			if (Password::comparePassword($pwHash, $accountPWHash)) {
+
+				//stores the user object in a session called $_SESSION['user']
+				$userToLogIn -> login();
+
+			} else {
+
+				echo 'Error with username or password. Please re-enter credentials to log in.';
+
+			}
+
+		}
+
+	}
+
+} elseif ($logout && $theUser) {
+
+	$logout = $_GET['logout'];
+
+	$theUser = $_SESSION['user'];
+
+	if ($theUser -> logout()) {
+
+		echo ' logged out successfully';
+		//redirect to the homepage
+
+	} else {
+
+		echo ' we could not log you out!';
+
+	}
+} else {
+
+	//currently do nothing. do not return stuff
 }
-else {
-		echo 'please put in a value for both username and password';
-}
-//LOGOUT CONTROLLER SECTION
-if($logoutSet && $logoutStatus )
-{
-	session_destroy();
-	head('Location:http://www.uscbtextbookexchange.com/Home');
-}
+
 
 ?>

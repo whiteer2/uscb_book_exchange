@@ -423,7 +423,7 @@ function updateUser(User $user){
 	}
 	else{
 		
-	$stmt = $this->dbh->prepare("UPDATE user SET ( fName = :fname, lName = lname , schedule = :schedule , passwordHash = :passwordHash, isBanned = :isBanned ) WHERE uscbEmailID = :emailID");
+	$stmt = $this->dbh->prepare("UPDATE user SET  fName = :fname, lName = lname , schedule = :schedule , passwordHash = :passwordHash, isBanned = :isBanned  WHERE uscbEmailID = :emailID");
 	
 	$stmt->bindParam(':emailID', $IDofEmail);
 	$stmt->bindParam(':fname', $theFirstName);
