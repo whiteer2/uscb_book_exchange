@@ -836,9 +836,47 @@ function updateListingByListingID(Listing $someListing){
 
 
 //For Tremaine
-function searchListings($searchQuery){
+function searchListings($searchQuery)
+{
+	listOfISBNs;
+	result;
+	result2;
+	result3;
+	result4;
 	
-}
+	if (!listOfISBNs)
+	{
+		return false;
+	} // end if
+	
+	else 
+	{
+		finalResults;
+	} // end else
+	
+	if(!finalResults)
+	{
+		return false;
+	}// end if
+	
+	else 
+	{
+		return finalResults;
+	} // end else
+	
+	
+	
+//	SELECT *
+//FROM listing
+//WHERE listing.ISBN IN 
+//(SELECT book.ISBN 
+//FROM book
+//WHERE ISBN LIKE '%query%'
+//OR book.title LIKE '%query%'
+//OR book.subject LIKE '%query%'
+//OR book.author LIKE '%query%'
+//OR book.publisherID = (SELECT publisher.publisherID from publisher WHERE publisher.publisher LIKE '%query%')) 
+} // end function searchListings
 
 
 //DB FUNCTIONS FOR ZACH
