@@ -12,7 +12,7 @@ $theLastName = isset($_POST['lName']);
 $theSchedule = isset($_POST['schedule']);
 
 if ($email && $password && $passwordConfirm && $theFirstName && $theLastName) {
-	$email = $_POST['emailID'];
+	$email = $_POST['email'];
 	$password = $_POST['pw'];
 	$passwordConfirm = $_POST['pwc'];
 	$theFirstName = $_POST['fName'];
