@@ -3,22 +3,29 @@
 
 require_once 'Model/DB.php';
 //require_once 'Model/User.php'; not needed
-//$listingID = isset($_POST['listingID']);
-//$userID = isset($_POST['userID']);
 
-$listingID = 1;
-$userID = 1;
-if($listingID && $userID){
+$listingID = isset($_POST['listingID']);
+$theUser = isset($_SESSION['user']);
+
+//FOR TESTING PURPOSES ONLY, COMMENT OUT FOR LIVE
+//$listingID = 1;
+//$theUser = 1;
+
+if($listingID && $theUser){
 	
-	$listingID = 2;
-	;
+	//FOR TESTING PURPOSES ONLY, COMMENT OUT FOR LIVE
+	//$listingID = 3;
+	//$userID = 5;
 	
-	$userID =9;
-	;
+	$listingID = $_POST['listingID'];
+	$theUser = $_SESSION['userID'];
+	
+	$userID = $theUser->getUserID();
+		
 	
 	$dbh = new DB();
 	
-	if($dbh -> deleteListingByListingIDAndUserID($listingID, $userID)){
+	if($dbh->deleteListingByListingIDAndUserID($listingID,$userID)){
 		
 		echo 'listing deleted successfully';
 		
@@ -32,8 +39,8 @@ if($listingID && $userID){
 else
 	 {
 	
-	//do nothing
-	echo 'do nothing make sure it works';
+	echo ' please log in to continue';
+
    }
 
 
