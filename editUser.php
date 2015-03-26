@@ -1,40 +1,43 @@
 <?php
 
  require_once "Model/DB.php";
- require_once "model/Book.php";
+ require_once "Model/User.php";
  
-  
+ 
+ $user = $_SESSION(['user']);
+ $newSchedule = $_POST(['schedule']); 
  $dbh = new DB();
- 
- //$someBook = new Book();
- 
-// 
-// $someBook->setAuthor("zach is a bitch");
-// 
-// $someBook->setISBN(1234512345123);
-// 
-// $someBook->setSubject("Bitches n shit");
-// 
-// $someBook->setTitle("I AM A HO");
-// 
-// $someBook->setPublisherID(3);
-// 
-// $swagdaddy = $dbh->insertBook($someBook);
-// 
-// echo 'we got this far';
-// echo $swagdaddy;
-// 
-// if($swagdaddy){
-// 	
-	// echo ' yo shit worked!';
-// 	
-// }
-// 
-// else{
-// 	
-	// echo 'this shit didnt work.';
-// }
-
+ $user = new User();
+ if($user->isLoggedIn())
+ {
+ 	
+ 	$user = new User();
+	$result = $user->getSchedule();
+	
+	if($result)
+	{
+		
+		$updateSchedule = $user->setSchedule($newSchedule);
+		
+	if($updateSchedule)
+	{
+		
+		echo 'update sucessfully';
+		
+	}
+	else
+		{
+			echo 'failed to update';
+		}
+ }
+ else {
+     echo'failed to get schedule';
+ }
+ echo 'schedule updated';
+ }
+ else {
+     echo 'not logged in';
+     }
 
 //edit user module for Zach to code
 
