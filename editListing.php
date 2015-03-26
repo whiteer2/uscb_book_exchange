@@ -90,7 +90,7 @@ $listing = isset($_POST['listing']);
 }// end of 
 	 else 
 		 {
-		 	echo 'lsisting updated sucessfully';
+		 	echo 'listing updated sucessfully';
 		 }// end of else
 	 
 	 

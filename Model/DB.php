@@ -608,7 +608,7 @@ function deleteListingByListingIDAndUserID($listingID, $userID){
 			$theUserID = $userID;
 			
 	 		try{
-	 			if($stmt->excute())
+	 			if($stmt->execute())
 				
 	 			{
 	 				
@@ -653,7 +653,7 @@ function deleteAllListingsByUserID($userID){
 		$IDofTheUser = $userID;
 
 		try{
-	 			if($stmt->excute())				
+	 			if($stmt->execute())				
 	 			{
 	 				
 				return TRUE;
@@ -699,7 +699,7 @@ function getListingbyListingID($listingID){
 
 		try{
 			
-			if($stmt->excute()){
+			if($stmt->execute()){
 				
 			$result = $stmt->fetch();
 	
@@ -751,7 +751,7 @@ function getListingsByUserID($userID){
 		$IDofUser = $userID;
 
 		try{
-			if($stmt -> excute()){
+			if($stmt -> execute()){
 		
 				if(!$result)
 				{
@@ -854,7 +854,7 @@ function updateListingByListingID(Listing $someListing){
 	
 		try{
 		
-			if($stmt->excute()){
+			if($stmt->execute()){
 			
 				return TRUE;
 			
