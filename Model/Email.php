@@ -2,6 +2,7 @@
 
 require_once 'PHPMailer-master/PHPMailerAutoload.php';
 
+//this is the email class
 class Email {
 	
 private $mail;
