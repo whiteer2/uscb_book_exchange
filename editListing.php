@@ -1,97 +1,89 @@
 <?php
 require_once 'Model/DB.php';
+require_once 'Model/Listing.php';
+
 
 $theUser = isset($_SESSION['user']);
 $price =  isset($_POST['price']);
 $isNegotiable = isset($_POST['isNegotiable']);
 $description = isset($_POST['description']);
-$listing = isset($_POST['listing']);
+$listingID= isset($_POST['listingID']);
 
+//FOR TEST PURPOSES ONLY SO WE DO NOT HAVE TO VERIFY USER FOR MODULE
+//$theUser = 1;
 
-	if($theUser)
+	if($theUser && $listingID)
 	{
-
-	$listingToUpdate = getListingbyListingID($listingID);
-
-	if(!$listingToUpdate){
+		$listingID= $_POST['listingID'];
 		
-	echo "listing doesn't exist";
+		$theUser = $_SESSION['user'];
+		
+		$userID = $theUser->getUserID();
+		
+		//FOR TEST PURPOSES ONLY
+		//$userID = 5;
+		
+		$dbh = new DB();
+		
+		
+		$listingToUpdate = $dbh->getListingbyListingID($listingID);
+
+		if(!$listingToUpdate){
+		
+			echo "listing doesn't exist";
 	
-	}
+		}//end if
 	
-	else
-	{
+		else
+		{
+			
+			
 	
-		 if($price)
-	 	{
+			 if($price)
+	 			{
 	 		
-			$price = $_POST['price'];
+				$listingToUpdate->setPrice($_POST['price']);
 	 	
-	 	}
-		 else{
+			 	}
+		     if($isNegotiable)
+				 {
 		 	
-			$price = 0;
+				$listingToUpdate->setIsNegotiable($_POST['isNegotiable']);
+		
+	 			}
+		    if($description)
+	 			{
+	 	
+				$listingToUpdate->setDescription($_POST['description']);
+		
+	 			}
+		 	  	 
+	 		
+	 		
+	 		if(!$dbh->updateListingWithUserID($listingToUpdate, $userID))
+	 			{
+	 	
+	 			echo 'could not update listing';
+	 
+				 }
+		
+	 		else 
+	 		{
+	 	
+			echo 'listing updated sucessfully';	
+		
+	 		}
+	 
+	}//end else
+}// end if 
+
+else 
+{
+	
+	echo 'Please log into account to update Listing';
 			
-		 }
-		 
-	 
-		 if($isNegotiable)
-		 {
-		 	
-			$isNegotiable = $_POST['isNegotiable'];
-		
-	 	}
-		 else{
-		 	
-			$isNegotiable = 0;
-			
-		 }
-		 
-	 
-		 if($description)
-	 	{
-	 	
-		$description = $_POST['description'];
-		
-	 	}
-		 else{
-		 	
-		 	$description = "";
-			
-		 }
-	 
-	  if($listing)
-	 	{
-	 	
-		$listing = $_POST['listing'];
-		
-	 	}
-		 else{
-		 	
-		 	$listing = 0;
-			
-		 }
-	 
-	 	if(!$updateListing($listingToUpdate))
-	 	{
-	 	
-	 	echo 'could not update listing';
-	 
-		 }
-		
-	 	else 
-	 	{
-	 	
-		echo 'listing updated sucessfully';	
-		
-	 	}
-	 
-	}
-}// end of 
-	 else 
-		 {
-		 	echo 'lsisting updated sucessfully';
-		 }// end of else
-	 
-	 
-	 
+ }// end of else
+	 	 
+
+?>
+

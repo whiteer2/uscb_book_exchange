@@ -3,13 +3,15 @@
 require_once 'Model/DB.php';
 require_once 'Model/Email.php';
 
-//uncomment for life purposes!
-//$email = $_GET['email'];
+//uncomment for live purposes!
+$email = isset($_GET['email']);
 
 //comment or delete for life purposes. This is for testing only
-$email = 'glesias@email.sc.edu';
+//$email = 'glesias@email.sc.edu';
 
-if(isset($email)){
+if($email){
+	
+	$email = $_GET['email'];
 	
 	$newEmail = new Email();
 	
