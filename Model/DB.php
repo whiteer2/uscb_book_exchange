@@ -774,18 +774,20 @@ function getListingsByUserID($userID){
 
 		try{
 			if($stmt -> execute()){
+				
+				$result = $stmt->fetchAll();
 		
 				if(!$result)
 				{
 			
-				return FALSE;
+					return FALSE;
 					
 				}
 		
 				else
 				{						
 				
-					return $this->createListingFromResult($result);
+					return $result;
 				
 				}
 			}
