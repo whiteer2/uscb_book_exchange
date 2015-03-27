@@ -27,7 +27,7 @@ function __construct(){
 		$this->dbh =  $dbh;
 		
 	} catch (PDOException $e) {
-		echo 'error';
+		//echo 'error';
     	return FALSE;
 	}
 
@@ -423,7 +423,7 @@ function updateUser(User $user){
 	}
 	else{
 		
-	$stmt = $this->dbh->prepare("UPDATE user SET ( fName = :fname, lName = lname , schedule = :schedule , passwordHash = :passwordHash, isBanned = :isBanned ) WHERE uscbEmailID = :emailID");
+	$stmt = $this->dbh->prepare("UPDATE user SET  fName = :fname, lName = lname , schedule = :schedule , passwordHash = :passwordHash, isBanned = :isBanned  WHERE uscbEmailID = :emailID");
 	
 	$stmt->bindParam(':emailID', $IDofEmail);
 	$stmt->bindParam(':fname', $theFirstName);
@@ -774,18 +774,20 @@ function getListingsByUserID($userID){
 
 		try{
 			if($stmt -> execute()){
+				
+				$result = $stmt->fetchAll();
 		
 				if(!$result)
 				{
 			
-				return FALSE;
+					return FALSE;
 					
 				}
 		
 				else
 				{						
 				
-					return $this->createListingFromResult($result);
+					return $result;
 				
 				}
 			}

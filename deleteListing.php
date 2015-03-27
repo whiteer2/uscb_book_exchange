@@ -17,7 +17,7 @@ if($listingID && $theUser){
 	//$userID = 5;
 	
 	$listingID = $_POST['listingID'];
-	$theUser = $_SESSION['userID'];
+	$theUser = $_SESSION['user'];
 	
 	$userID = $theUser->getUserID();
 		
