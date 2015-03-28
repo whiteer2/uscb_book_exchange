@@ -1,7 +1,7 @@
 <?php
 
 
-require_once 'Model/DB.php';
+require_once 'Model/theModel.php';
 
 $listingID = isset($_POST['listingID']);
 $theUser = isset($_SESSION['user']);

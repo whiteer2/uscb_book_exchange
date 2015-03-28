@@ -1,7 +1,5 @@
 <?php
-include_once 'Model/DB.php';
-include_once 'Model/User.php';
-include_once 'Model/Password.php';
+require_once 'Model/theModel.php';
 
 //login/logout module for zach to code
 $email = isset($_POST['email']);
@@ -33,6 +31,8 @@ if ($email && $password && !$theUser) {
 			echo ' Error with username or password. Please re-enter credentials to log in.';
 
 		} else {
+			
+			//echo print_r($userToLogIn);
 
 			$pwHash = Password::hashPassword($password);
 
@@ -42,6 +42,8 @@ if ($email && $password && !$theUser) {
 
 				//stores the user object in a session called $_SESSION['user']
 				$userToLogIn -> login();
+				
+				echo 'Welcome, ' . $userToLogIn->getFirstName() . '.';
 
 			} else {
 
@@ -54,7 +56,7 @@ if ($email && $password && !$theUser) {
 	}
 
 } elseif ($logout && $theUser) {
-
+	
 	$logout = $_GET['logout'];
 
 	$theUser = $_SESSION['user'];
@@ -70,7 +72,7 @@ if ($email && $password && !$theUser) {
 
 	}
 } else {
-
+	
 	//currently do nothing. do not return stuff
 }
 

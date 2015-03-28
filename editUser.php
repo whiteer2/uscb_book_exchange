@@ -1,10 +1,10 @@
 <?php
 
-require_once "Model/DB.php";
-require_once "Model/User.php";
+require_once 'Model/theModel.php';
 
-$user = isset($_SESSION(['user']));
-$newSchedule = isset($_POST(['schedule']));
+$user = isset($_SESSION['user']);
+
+$newSchedule = isset($_POST['schedule']);
 
 if ($user && $newSchedule) {
 
