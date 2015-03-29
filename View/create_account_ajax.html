@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script>
+			//
+			$(document).read(function(){
+				$("#submit").click(function(){
+					
+					var connectionString = 'http://localhost:8080/uscbtextbookexchange';
+		
+					//email
+					$thisEmail = $_GET['email'];
+					$thisPassword = $_GET['password'];
+					$thisConfirmPassword = $_GET['confirmPassword'];
+					$thisEmailCheck = $_GET['emailCheck'];
+					$thisEmailHash = $_GET['emailHash'];
+					$thisPasswordHash = $_GET['passwordHash'];
+		
+					$.ajax({
+						//the url to which we need to send the stuff
+						url: connectionString + '/forgotPassword.php',
+						//the data to send
+						data: {email:$thisEmail, password: $thisPassword, confirmPassword: $thisConfirmPassword, emailCheck: $thisEmailCheck, emailHash: $thisEmailHash, passwordHash: $thisPasswordHash},
+						//define the method post or get
+						method: 'GET',
+						//if the function is successful do something
+						success:function(){}, //do something
+						//else if the thing fail we want to throw an exception
+						error: function(){}// do something
+				});
+			});
+			
+		</script>
+		
+	</head>
+	
+	
+	
+</html>
+
+
+
+
+
+
