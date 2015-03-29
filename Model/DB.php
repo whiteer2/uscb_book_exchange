@@ -1,9 +1,5 @@
 <?php
 
-require_once 'User.php';
-require_once 'Listing.php';
-require_once 'Book.php';
-
 class DB{
 
 //fields	
@@ -64,6 +60,27 @@ function deleteEmailByName($emailName){
 	$stmt->bindParam(':email', $nameOfEmail);
 	
 	$nameOfEmail = $emailName;
+	
+	try{
+		if($stmt->execute()){
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	catch(exception $e){
+		return FALSE;
+	}
+}
+
+//delete an email by the email name. returns true is deleted, and false otherwise
+function deleteEmailByEmailID($emailID){
+	
+	$stmt = $this->dbh->prepare("DELETE FROM email WHERE uscbEmailID = :emailID LIMIT 1");
+	$stmt->bindParam(':emailID', $IDofEmail);
+	
+	$IDofEmail = $emailID;
 	
 	try{
 		if($stmt->execute()){
@@ -423,7 +440,7 @@ function updateUser(User $user){
 	}
 	else{
 		
-	$stmt = $this->dbh->prepare("UPDATE user SET  fName = :fname, lName = lname , schedule = :schedule , passwordHash = :passwordHash, isBanned = :isBanned  WHERE uscbEmailID = :emailID");
+	$stmt = $this->dbh->prepare("UPDATE user SET  fName = :fname, lName = :lname , schedule = :schedule , passwordHash = :passwordHash, isBanned = :isBanned  WHERE uscbEmailID = :emailID");
 	
 	$stmt->bindParam(':emailID', $IDofEmail);
 	$stmt->bindParam(':fname', $theFirstName);
@@ -539,7 +556,7 @@ function insertListing(Listing $someListing){
 	}
 	else{
 		
-	$stmt = $this->dbh->prepare("INSERT INTO listing ( ListingID , ISBN , userID  , price , isNegotiable , description ) VALUES ( :newListing , :newISBN , :newUserID , :newPrice , :newisNegotiable, :newDescription )");
+	$stmt = $this->dbh->prepare("INSERT INTO listing ( listingID , ISBN , userID  , price , isNegotiable , description ) VALUES ( :newListing , :newISBN , :newUserID , :newPrice , :newisNegotiable, :newDescription )");
 	
 	$stmt->bindParam(':newListing', $newListing);
 	$stmt->bindParam(':newISBN', $newISBN);
@@ -894,7 +911,69 @@ function updateListingWithUserID(Listing $someListing, $userID){
 //For Tremaine
 function searchListings($searchQuery){
 	
-}
+	//inner join would work as well, but left join only has to check one table, not both. In our case, LEFT JOIN and INNER JOIN
+	// return the same results, but the LEFT JOIN will perform better.
+
+$query = "SELECT listing.listingID, listing.price, listing.isNegotiable, listing.description,
+			book.ISBN, book.title, book.author, book.subject, publisher.publisher, email.uscbEmail, user.fName, user.lName, user.schedule
+			FROM listing
+			LEFT JOIN book
+			ON listing.ISBN = book.ISBN
+			LEFT JOIN publisher
+			ON book.publisherID = publisher.publisherID
+			LEFT JOIN user
+			ON listing.userID = user.userID
+			LEFT JOIN email
+			ON user.uscbEmailID = email.uscbEmailID
+			WHERE listing.ISBN IN 
+			(SELECT book.ISBN 
+			FROM book
+			WHERE ISBN LIKE :query
+			OR book.title LIKE :query
+			OR book.subject LIKE :query
+			OR book.author LIKE :query
+			OR book.publisherID = (SELECT publisher.publisherID from publisher WHERE publisher.publisher LIKE :query))";
+	
+	$stmt = $this->dbh->prepare($query);
+	$stmt->bindParam(':query', $someQuery,PDO::PARAM_STR);
+	
+	$someQuery = '%' . $searchQuery . '%';
+	
+		
+	try{
+			if($stmt -> execute()){
+				
+				$result = $stmt->fetchAll();
+		
+				if(!$result)
+				{
+			
+					return FALSE;
+					
+				}
+		
+				else
+				{						
+				
+					return $result;
+				
+				}
+			}
+			
+		else 
+			{
+			
+			return FALSE;
+			
+		}
+	
+	}	//end of try statement
+	catch(exception $e){
+	
+		return FALSE;
+	
+	}//end of catch statement
+}//end function
 
 
 //DB FUNCTIONS FOR ZACH
@@ -1086,9 +1165,9 @@ function getBook(Book $someBook){
 
 function getBookByISBN($someISBN)
 {
-	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :publisherID");
-    $stmt->bindParam(':publisherID', $thePublisherID);
-    $thePublisherID = $publisherID;
+	$stmt = $this->dbh->prepare("SELECT * FROM book WHERE ISBN = :theISBN LIMIT 1");
+    $stmt->bindParam(':theISBN', $theBookISBN);
+    $theBookISBN = $someISBN;
 	try
 	{
  		if($stmt->execute())
@@ -1106,6 +1185,9 @@ function getBookByISBN($someISBN)
 					$newBook->settitle($result['title']);
 					$newBook->setAuthor($result['author']);
 					$newBook->setSubject($result['subject']);
+					
+					return $newBook;
+					
 				}//end else statement
 		}//end outer if statement
 	}

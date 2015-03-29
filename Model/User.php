@@ -81,6 +81,7 @@ class User{
 	}
 	
 	function login(){
+				
 		$this->isLoggedIn = 1;
 		$_SESSION['user'] = $this;
 		return TRUE;		

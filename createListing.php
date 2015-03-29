@@ -1,11 +1,11 @@
 <?php
-require_once 'Model/DB.php';
+require_once 'Model/theModel.php';
 
-$ISBN = isset($_GET['ISBN']);
+$ISBN = isset($_GET['bookISBN']);
 $title = isset($_GET['bookTitle']);
 $subject = isset($_GET['bookSubject']);
-$author = isset($_GET['BookAuthor']);
-$publisher = isset($_GET['publisher']);
+$author = isset($_GET['bookAuthor']);
+$publisher = isset($_GET['bookPublisher']);
 $price = isset($_GET['price']);
 $isNegotiable = isset($_GET['isNegotiable']);
 $description = isset($_GET['description']);
@@ -14,11 +14,11 @@ $theUser = isset($_SESSION['user']);
 
 if ($ISBN && $title && $subject && $author && $publisher && $price && $isNegotiable && $theUser) {
 
-	$ISBN = $_GET['ISBN'];
+	$ISBN = $_GET['bookISBN'];
 	$title = $_GET['bookTitle'];
 	$subject = $_GET['bookSubject'];
-	$author = $_GET['BookAuthor'];
-	$publisher = $_GET['publisher'];
+	$author = $_GET['bookAuthor'];
+	$publisher = $_GET['bookPublisher'];
 	$price = $_GET['price'];
 	$isNegotiable = $_GET['isNegotiable'];
 
@@ -55,7 +55,8 @@ if ($ISBN && $title && $subject && $author && $publisher && $price && $isNegotia
 				$publisherID = $dbh -> getPublisherIDByName($publisher);
 
 				if (!$publisherID) {
-
+					//echo ' bad publisher ID';
+					
 					echo 'Could not create listing! An error occured!';
 
 				} else {
@@ -89,23 +90,30 @@ if ($ISBN && $title && $subject && $author && $publisher && $price && $isNegotia
 						$listingToCreate -> setDescription($description);
 
 						if ($dbh -> insertListing($listingToCreate)) {
-
+							
+														
 							echo ' Listing created successfully!';
 
 						} else {
+							
+							//echo ' bad insert listing';
 
 							echo 'Could not create listing! An error occured!';
 
 						}
 
 					} else {
-
+						
+						//echo ' bad insert book';
+						
 						echo 'Could not create listing! An error occured!';
 
 					}
 
 				}
 			} else {
+				
+				//echo ' bad insert publisher';
 
 				echo 'Could not create listing! An error occured!';
 
@@ -148,12 +156,16 @@ if ($ISBN && $title && $subject && $author && $publisher && $price && $isNegotia
 					echo ' Listing created successfully!';
 
 				} else {
+					
+					//echo ' bad insert listing';
 
 					echo 'Could not create listing! An error occured!';
 
 				}
 
 			} else {
+				
+				//echo ' bad insert book';
 
 				echo 'Could not create listing! An error occured!';
 
@@ -180,6 +192,8 @@ if ($ISBN && $title && $subject && $author && $publisher && $price && $isNegotia
 			echo ' Listing created successfully!';
 
 		} else {
+			
+			//echo ' bad insert listing YOLO';
 
 			echo 'Could not create listing! An error occured!';
 

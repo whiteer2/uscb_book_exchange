@@ -1,8 +1,6 @@
 <?php
 
-require_once 'Model/DB.php';
-require_once 'Model/Email.php';
-require_once 'Model/Password.php';
+require_once 'Model/theModel.php';
 
 
 $email = isset($_POST['email']);

@@ -1,5 +1,5 @@
-<?php //get all listing module for ernest to code ?><?php
-require_once 'Model/DB.php';
+<?php
+require_once 'Model/theModel.php';
 
 
 $user = isset($_SESSION['user']);
