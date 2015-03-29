@@ -1,7 +1,7 @@
 <?php
 
 
-require_once 'Model/DB.php';
+require_once 'Model/theModel.php';
 
 $listingID = isset($_POST['listingID']);
 $theUser = isset($_SESSION['user']);
@@ -17,7 +17,7 @@ if($listingID && $theUser){
 	//$userID = 5;
 	
 	$listingID = $_POST['listingID'];
-	$theUser = $_SESSION['userID'];
+	$theUser = $_SESSION['user'];
 	
 	$userID = $theUser->getUserID();
 		

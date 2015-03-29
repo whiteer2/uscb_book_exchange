@@ -1,13 +1,15 @@
 <?php
 
-require_once 'Model/DB.php';
-require_once 'Model/Email.php';
+require_once 'Model/theModel.php';
 
-$email = $_GET['email'];
-$emailHash = $_GET['code'];
+$email = isset($_GET['email']);
+$emailHash = isset($_GET['code']);
 
 //make sure the get fields are set!
-if(isset($email) && isset($emailHash)){
+if($email && $emailHash){
+	
+	$email = $_GET['email'];
+	$emailHash = $_GET['code'];
 	
 	//hash the email	
 	$emailHashCheck = Email::hashEmailOrPassword($email);
@@ -22,9 +24,8 @@ if(isset($email) && isset($emailHash)){
 		
 		if(!$emailExists){
 			
-			//send the user to the create account page
-			//echo' create account page';
 			//take the user to the create acct page in the view
+			header ('location:View/create_account.html?email=' . $email . "&code=" . $emailHash);
 			
 		}
 		else{

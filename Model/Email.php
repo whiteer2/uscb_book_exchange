@@ -6,9 +6,10 @@ require_once 'PHPMailer-master/PHPMailerAutoload.php';
 class Email {
 	
 private $mail;
+private $connectionString;
 
 function __construct(){
-
+	$this->connectionString = "http://localhost:8080/uscbtextbookexchange/";
 
 	$this->mail = new PHPMailer();
 
@@ -85,7 +86,7 @@ function sendValidationEmail($email){
 	
 	$body = 'Please click the link to register your email. ';
 	
-	$getRequest = "<a href='http://localhost:8080/uscbtextbookexchange/verifyEmailP2.php?email=". $email . "&code=". $emailHash . "'> Click Here!</a>";
+	$getRequest = "<a href=" . $this->connectionString . "verifyEmailP2.php?email=". $email . "&code=". $emailHash . "'> Click Here!</a>";
 	
 	$body = $body . $getRequest;
 	
@@ -107,7 +108,7 @@ function sendPasswordResetRequest($to, $password){
 	
 	$body = 'Please click the link to reset your password. ';
 	
-	$getRequest = "<a href='http://localhost:8080/uscbtextbookexchange/forgotPassword.php?email=". $to . "&code1=". $emailHash . "&code2=". $passwordHash .  "'> Click Here!</a>";
+	$getRequest = "<a href=" . $this->connectionString ."forgotPassword.php?email=". $to . "&code1=". $emailHash . "&code2=". $passwordHash .  "'> Click Here!</a>";
 	
 	$body = $body . $getRequest;
 	

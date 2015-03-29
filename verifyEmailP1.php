@@ -1,7 +1,6 @@
 <?php
 
-require_once 'Model/DB.php';
-require_once 'Model/Email.php';
+require_once 'Model/theModel.php';
 
 //uncomment for live purposes!
 $email = isset($_GET['email']);
