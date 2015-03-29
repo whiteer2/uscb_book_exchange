@@ -6,7 +6,7 @@ var connectionString = 'http://localhost:8080/uscbtextbookexchange';
 
 //GENERAL AJAX FUNCTIONS
 
-//waiting on tremaine to code backend so I can implement this function - BG
+//works and verified BG 3/28/15
 function searchListings(searchQuery){
 	
 	return $.ajax({

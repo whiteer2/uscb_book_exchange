@@ -913,7 +913,7 @@ function searchListings($searchQuery){
 	
 	//inner join would work as well, but left join only has to check one table, not both. In our case, LEFT JOIN and INNER JOIN
 	// return the same results, but the LEFT JOIN will perform better.
-	
+
 $query = "SELECT listing.listingID, listing.price, listing.isNegotiable, listing.description,
 			book.ISBN, book.title, book.author, book.subject, publisher.publisher, email.uscbEmail, user.fName, user.lName, user.schedule
 			FROM listing
@@ -928,14 +928,52 @@ $query = "SELECT listing.listingID, listing.price, listing.isNegotiable, listing
 			WHERE listing.ISBN IN 
 			(SELECT book.ISBN 
 			FROM book
-			WHERE ISBN LIKE '%query%'
-			OR book.title LIKE '%query%'
-			OR book.subject LIKE '%query%'
-			OR book.author LIKE '%query%'
-			OR book.publisherID = (SELECT publisher.publisherID from publisher WHERE publisher.publisher LIKE '%query%'))";
+			WHERE ISBN LIKE :query
+			OR book.title LIKE :query
+			OR book.subject LIKE :query
+			OR book.author LIKE :query
+			OR book.publisherID = (SELECT publisher.publisherID from publisher WHERE publisher.publisher LIKE :query))";
 	
+	$stmt = $this->dbh->prepare($query);
+	$stmt->bindParam(':query', $someQuery,PDO::PARAM_STR);
 	
-}
+	$someQuery = '%' . $searchQuery . '%';
+	
+		
+	try{
+			if($stmt -> execute()){
+				
+				$result = $stmt->fetchAll();
+		
+				if(!$result)
+				{
+			
+					return FALSE;
+					
+				}
+		
+				else
+				{						
+				
+					return $result;
+				
+				}
+			}
+			
+		else 
+			{
+			
+			return FALSE;
+			
+		}
+	
+	}	//end of try statement
+	catch(exception $e){
+	
+		return FALSE;
+	
+	}//end of catch statement
+}//end function
 
 
 //DB FUNCTIONS FOR ZACH
