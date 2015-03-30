@@ -893,10 +893,41 @@ function updateListingWithUserID(Listing $someListing, $userID){
 function searchListings($searchQuery)
 {
 	listOfISBNs;
-	result;
-	result2;
-	result3;
-	result4;
+	//result;
+	//result2;
+	//result3;
+	//result4;
+	
+	
+	
+	// bind values
+	
+	$query = 	"SELECT *
+				FROM listing
+				WHERE listing.ISBN IN 
+				(	SELECT book.ISBN 
+					FROM book
+					WHERE ISBN LIKE %:theQuery%
+					OR book.title LIKE '%:theQuery%'
+					OR book.subject LIKE '%:theQuery%'
+					OR book.author LIKE '%:theQuery%'
+					OR book.publisherID = (
+											SELECT publisher.publisherID from publisher
+											WHERE publisher.publisher LIKE '%:theQuery%'))";
+	$stmt = $this->dbh->prepare($query);
+	// bind values
+	
+	$stmt ->bindParam(':theQuery',$theQuery);
+	
+	
+	$theQuery = $searchQuery;
+	// execute
+	try{
+			if($stmt->execute())
+			{
+				$list = $stmt->fetchAll();
+				$stmt->closeCursor();
+	
 	
 	if (!listOfISBNs)
 	{
@@ -918,18 +949,22 @@ function searchListings($searchQuery)
 		return finalResults;
 	} // end else
 	
+				
+			} // end if
+			
+			else
+			{
+				return FALSE;
+			} // end else
+	} // end try
+	
+	catch(exception $e)
+	{
+		return FALSE;
+	} // end catch
 	
 	
-//	SELECT *
-//FROM listing
-//WHERE listing.ISBN IN 
-//(SELECT book.ISBN 
-//FROM book
-//WHERE ISBN LIKE '%query%'
-//OR book.title LIKE '%query%'
-//OR book.subject LIKE '%query%'
-//OR book.author LIKE '%query%'
-//OR book.publisherID = (SELECT publisher.publisherID from publisher WHERE publisher.publisher LIKE '%query%')) 
+    
 } // end function searchListings
 
 
