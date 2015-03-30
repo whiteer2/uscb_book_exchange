@@ -110,11 +110,11 @@ function isListingSet()
 		
 	 }	
 	
-	if(!isset($this-> listingID )){
-	
-	return FAlSE;
-		
-	}	
+	// if(!isset($this-> listingID )){
+// 	
+	// return FAlSE;
+// 		
+	// }	
 	
 	if(!isset($this-> price )){
 	
