@@ -47,11 +47,12 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Register/Login <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#register-modal" data-toggle="modal" data-target="#register-modal">Register</a></li>
-                <li><a href="#login-modal" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                <li><a href="#login-modal" data-toggle="modal" data-target="#login-modal">Log In</a></li>
+                <li><a id = "logOut" href="#logout-modal" data-toggle="modal" data-target="#logout-modal">Log Out</a></li>
                 <li><a href="#password-modal" data-toggle="modal" data-target="#password-modal">Forgot Password</a></li>
               </ul>
             </li>
-            <li><a href="#">Sell</a></li>
+            <li><a href="create_listing.html">Sell</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -175,6 +176,23 @@
                 <div class="modal-footer">
                     <p id = "FPStatus"></p>
                 </div>                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logout-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-title">
+                    <h2>Log Out</h2>
+                </div>
+                <div class="modal-body">
+                    <!-- <p>Remember Password? <a href="#login-modal" data-toggle="modal" data-target="#register-modal">click here</a></p> -->
+                    <!-- <form role="form" action=""> -->
+                        <p id = "logOutStatus"> Please Log In. </p>
+                    <!-- </form> -->
+                </div>                             
             </div>
         </div>
     </div>

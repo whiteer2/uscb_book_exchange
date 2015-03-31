@@ -108,7 +108,7 @@ function sendPasswordResetRequest($to, $password){
 	
 	$body = 'Please click the link to reset your password. ';
 	
-	$getRequest = "<a href=" . $this->connectionString ."forgotPassword.php?email=". $to . "&code1=". $emailHash . "&code2=". $passwordHash .  "'> Click Here!</a>";
+	$getRequest = "<a href=" . $this->connectionString ."forgotPassword.php?email=". $to . "&code1=". $emailHash . "&code2=". $passwordHash .  "> Click Here!</a>";
 	
 	$body = $body . $getRequest;
 	

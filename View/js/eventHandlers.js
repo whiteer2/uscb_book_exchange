@@ -105,16 +105,100 @@ $(document).ready(function(){
     	} //end else 
   });
   
+   $('#createAcctSubmit').click(function(){
+   	
+   	//.alert("SWAGNESS");
+   	
+   		email = $('#emailBox').val();
+   		
+   		//code = $('#codeBox').val();
+   		
+   		window.alert(code);
+   		
+   		//window.alert(email);
+   		
+   		firstName = $('#fName').val();
+   		
+   		//window.alert(firstName);
+   		
+   		lastName = $('#lName').val();
+   		
+   		//window.alert(lastName);
+   		
+   		password = $('#pw').val();
+   		
+   		//window.alert(password);
+   		
+   		passwordConfirmed = $('#pwc').val();
+   		
+   		//window.alert(passwordConfirmed);
+   		
+   		schedule = $('#schedule').val();
+   		
+   		//window.alert(schedule);
+   		
+   		//window.alert(email + "  " + code + "  " + password + "  " + passwordConfirmed + "  " + firstName + "  " + lastName + "  " + schedule);
+   		
+   		if((email == '') ||(firstName == '') || (lastName == '') || (password == '') || (passwordConfirmed == '') || (schedule == '')){
+   			
+   			$('#createAcctStatus').html('Please fill out all fields!');
+   			
+   		}   	
+   		else if(code == '' || code == undefined){
+   			
+   			window.location.href = "index.html";
+   			
+   		}
+   		else{
+   			
+   			$('#createAcctStatus').html('Waiting on Server...');
+   			
+   			createUser(email, code, password, passwordConfirmed, firstName, lastName, schedule).success(function (data) {
+   				
+   				window.alert(data);
+    			
+    			$('#createAcctStatus').html(data);	
+    			
+    			if(data == 'Account successfully created. Please log in to continue.'){
+    				
+    				setTimeout(function () {
+   						window.location.href = "index.html"; //will redirect to your blog page (an ex: blog.html)
+						},	3000); //will call the function after 2 secs.
+    				
+    			}			
+   	
+   	 	
+			}).error(function(xhr, textStatus, errorThrown){
+				//window.alert("SWAG1");
+				
+				$('#createAcctStatus').html(textStatus);		
+
+			});
+			
+			//window.alert("SWAG");
+   			
+   		}
+   	
+   	
+   });
   
-  
-  
+   $('#logOut').click(function(){
+   	
+   	$('#logOutStatus').html("Waiting on Server...");
+   	
+   			logOut().success(function (data) { 
+    			
+    			$('#logOutStatus').html(data);
+    		   	 	
+			}).error(function(xhr, textStatus, errorThrown){
+				
+				$('#logOutStatus').html(textStatus);		
+
+			});    		
+   	
+   });
   
   }); 
 
   
-  function getURL(){
-  	
-  	alert(document.URL);
-  	
-  	
-  }
+ 

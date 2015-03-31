@@ -45,7 +45,8 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Register/Login <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li><a href="#register-modal" data-toggle="modal" data-target="#register-modal">Register</a></li>
-                <li><a href="#login-modal" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                <li><a href="#login-modal" data-toggle="modal" data-target="#login-modal">Log In</a></li>
+                <li><a id = "logOut" href="#logout-modal" data-toggle="modal" data-target="#logout-modal">Log Out</a></li>
                 <li><a href="#password-modal" data-toggle="modal" data-target="#password-modal">Forgot Password</a></li>
               </ul>
             </li>
@@ -65,12 +66,12 @@
                         <h3>"Lorem ipsum dolor sit amet,</h3>
                         <ul class="list-inline intro-social-buttons">
                             <li>
-                                <form class="navbar-form navbar-left" role="search">
+                                <!-- <form class="navbar-form navbar-left" role="search"> -->
                                   <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search for Book ...">
+                                    <!-- <input type="text" class="form-control" placeholder="Search for Book ..."> -->
                                   </div>
-                                  <button type="submit" id="searchButton" class="btn btn-default">Search</button>
-                                </form>
+                                 <a href="search_listings.html"><button id="searchButton" class="btn btn-default">Search Listings!</button></a>
+                                <!-- </form> -->
                             </li>
                         </ul>
                     </div>
@@ -180,6 +181,23 @@
                 <div class="modal-footer">
                     <p id = "FPStatus"></p>
                 </div>                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logout-modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-title">
+                    <h2>Log Out</h2>
+                </div>
+                <div class="modal-body">
+                    <!-- <p>Remember Password? <a href="#login-modal" data-toggle="modal" data-target="#register-modal">click here</a></p> -->
+                    <!-- <form role="form" action=""> -->
+                        <p id = "logOutStatus"> Please Log In. </p>
+                    <!-- </form> -->
+                </div>                             
             </div>
         </div>
     </div>
