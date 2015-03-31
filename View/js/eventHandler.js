@@ -10,9 +10,10 @@ $(document).ready(function()
    	   	
    	//window.alert("The error is before I call searchListing");
    	
-    searchListings(searchQuery).success(function (data) 
+    searchListings(searchQuery).success(function(data) 
     {   
     	window.alert("the function call has been made successfully");
+    	window.alert(data);
    	     	//parseResults(data);  	
 }).error(function(xhr, textStatus, errorThrown)
 {
