@@ -86,7 +86,7 @@ function sendValidationEmail($email){
 	
 	$body = 'Please click the link to register your email. ';
 	
-	$getRequest = "<a href=" . $this->connectionString . "verifyEmailP2.php?email=". $email . "&code=". $emailHash . "'> Click Here!</a>";
+	$getRequest = "<a href=" . $this->connectionString . "verifyEmailP2.php?email=". $email . "&code=". $emailHash . "> Click Here!</a>";
 	
 	$body = $body . $getRequest;
 	
