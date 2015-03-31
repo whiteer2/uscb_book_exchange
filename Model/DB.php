@@ -909,8 +909,8 @@ function updateListingWithUserID(Listing $someListing, $userID){
 
 
 //For Tremaine
-function searchListings($searchQuery){
-	
+function searchListings($searchQuery)
+{
 	//inner join would work as well, but left join only has to check one table, not both. In our case, LEFT JOIN and INNER JOIN
 	// return the same results, but the LEFT JOIN will perform better.
 
@@ -974,7 +974,6 @@ $query = "SELECT listing.listingID, listing.price, listing.isNegotiable, listing
 	
 	}//end of catch statement
 }//end function
-
 
 //DB FUNCTIONS FOR ZACH
 
