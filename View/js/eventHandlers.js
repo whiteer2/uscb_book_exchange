@@ -111,9 +111,9 @@ $(document).ready(function(){
    	
    		email = $('#emailBox').val();
    		
-   		//code = $('#codeBox').val();
+   		code = $('#codeBox').val();
    		
-   		window.alert(code);
+   		//window.alert(code);
    		
    		//window.alert(email);
    		
