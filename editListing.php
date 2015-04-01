@@ -1,7 +1,5 @@
 <?php
-require_once 'Model/DB.php';
-require_once 'Model/Listing.php';
-
+require_once 'Model/theModel.php';
 
 $theUser = isset($_SESSION['user']);
 $price =  isset($_POST['price']);
@@ -28,6 +26,8 @@ $listingID= isset($_POST['listingID']);
 		
 		$listingToUpdate = $dbh->getListingbyListingID($listingID);
 
+		echo print_r($listingToUpdate);
+		
 		if(!$listingToUpdate){
 		
 			echo "listing doesn't exist";

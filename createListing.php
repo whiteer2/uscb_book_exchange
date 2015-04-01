@@ -1,65 +1,215 @@
 <?php
-require_once 'Model/DB.php';
-$user = isset($_GET['ISBN']);
-$book = isset($_GET['author']);
-$publisher = isset($_GET ['publisherID']);
+
+
+require_once 'Model/theModel.php';
+
+$ISBN = isset($_GET['bookISBN']);
+$title = isset($_GET['bookTitle']);
+$subject = isset($_GET['bookSubject']);
+$author = isset($_GET['bookAuthor']);
+$publisher = isset($_GET['bookPublisher']);
 $price = isset($_GET['price']);
+$isNegotiable = isset($_GET['isNegotiable']);
 $description = isset($_GET['description']);
 
-if(isLoggedIn($user))
-{
-	
-	
-	//check if both in db if not insert it
+$theUser = isset($_SESSION['user']);
 
-	if(!getBookByISBN($ISBN))
-	{
-		
-	//if we can't get book, have to look for publisher
-	getPublisherIDByName($publisherName);
-	
-		if(!getPublisherIDByName($publisherName)){
+if ($ISBN && $title && $subject && $author && $publisher && $price && $isNegotiable && $theUser) {
+
+	$ISBN = $_GET['bookISBN'];
+	$title = $_GET['bookTitle'];
+	$subject = $_GET['bookSubject'];
+	$author = $_GET['bookAuthor'];
+	$publisher = $_GET['bookPublisher'];
+	$price = $_GET['price'];
+	$isNegotiable = $_GET['isNegotiable'];
+
+	if ($description) {
+
+		$description = $_GET['description'];
+
+	} else {
+
+		$description = NULL;
+
+	}
+
+	$theUser = $_SESSION['user'];
+
+	$userID = $theUser -> getUserID();
+
+	$dbh = new DB();
+
+	$bookToListing = $dbh -> getBookByISBN($ISBN);
+
+	//book is not in the DB
+	if (!$bookToListing) {
+
+		$publisherID = $dbh -> getPublisherIDByName($publisher);
+
+		//publisher is not the DB
+		if (!$publisherID) {
+
+			if ($dbh -> insertPublisher($publisher)) {
+
+				//publisher inserted successfully!
+
+				$publisherID = $dbh -> getPublisherIDByName($publisher);
+
+				if (!$publisherID) {
+					//echo ' bad publisher ID';
+					
+					echo 'Could not create listing! An error occured!';
+
+				} else {
+
+					$bookToListing = new Book();
+
+					$bookToListing -> setISBN($ISBN);
+
+					$bookToListing -> setPublisherID($publisherID);
+
+					$bookToListing -> setTitle($title);
+
+					$bookToListing -> setSubject($subject);
+
+					$bookToListing -> setAuthor($author);
+
+					if ($dbh -> insertBook($bookToListing)) {
+
+						//book inserted successfully. now create the listing
+
+						$listingToCreate = new Listing();
+
+						$listingToCreate -> setISBN($ISBN);
+
+						$listingToCreate -> setUserID($userID);
+
+						$listingToCreate -> setPrice($price);
+
+						$listingToCreate -> setIsNegotiable($isNegotiable);
+
+						$listingToCreate -> setDescription($description);
+
+						if ($dbh -> insertListing($listingToCreate)) {
+							
+														
+							echo ' Listing created successfully!';
+
+						} else {
+							
+							//echo ' bad insert listing';
+
+							echo 'Could not create listing! An error occured!';
+
+						}
+
+					} else {
+						
+						//echo ' bad insert book';
+						
+						echo 'Could not create listing! An error occured!';
+
+					}
+
+				}
+			} else {
 				
-			insertPublisher($publisherName);
-			
-			getPublisherIDByName($publisherName);
-		
-		}//end of if for !getPublisherIDByName($publisherName)
-		
-		}// if doesn't get ISBN
+				//echo ' bad insert publisher';
 
-	if(!getPublisherNameByName($publisherName))
-	
-	{
-		//
-		if(!insertPublisher($publisherName))
-		
-		{
-			
-		echo "error, could not create listing";	
-			
-	
-		}	
-	}
-	
-	
-	if(!createBook($book))
-	{
-		echo "error could not create listing";
-		
-		
-	}
-	else 
-	{
-		echo"error could not create listing ";
-	}
-	else
-	{
-		echo'error please fill out the form';
-	}
-	else
-		{
-			echo "please log in";
+				echo 'Could not create listing! An error occured!';
+
+			}
+
 		}
+		//publisher is in the DB
+		else {
+
+			$bookToListing = new Book();
+
+			$bookToListing -> setISBN($ISBN);
+
+			$bookToListing -> setPublisherID($publisherID);
+
+			$bookToListing -> setTitle($title);
+
+			$bookToListing -> setSubject($subject);
+
+			$bookToListing -> setAuthor($author);
+
+			if ($dbh -> insertBook($bookToListing)) {
+
+				//book inserted successfully. now create the listing
+
+				$listingToCreate = new Listing();
+
+				$listingToCreate -> setISBN($ISBN);
+
+				$listingToCreate -> setUserID($userID);
+
+				$listingToCreate -> setPrice($price);
+
+				$listingToCreate -> setIsNegotiable($isNegotiable);
+
+				$listingToCreate -> setDescription($description);
+
+				if ($dbh -> insertListing($listingToCreate)) {
+
+					echo ' Listing created successfully!';
+
+				} else {
+					
+					//echo ' bad insert listing';
+
+					echo 'Could not create listing! An error occured!';
+
+				}
+
+			} else {
+				
+				//echo ' bad insert book';
+
+				echo 'Could not create listing! An error occured!';
+
+			}
+
+		}
+		//book is in the DB
+	} else {
+
+		$listingToCreate = new Listing();
+
+		$listingToCreate -> setISBN($ISBN);
+
+		$listingToCreate -> setUserID($userID);
+
+		$listingToCreate -> setPrice($price);
+
+		$listingToCreate -> setIsNegotiable($isNegotiable);
+
+		$listingToCreate -> setDescription($description);
+
+		if ($dbh -> insertListing($listingToCreate)) {
+
+			echo ' Listing created successfully!';
+
+		} else {
 			
+			//echo ' bad insert listing YOLO';
+
+			echo 'Could not create listing! An error occured!';
+
+		}
+
+	}
+
+} elseif (!$theUser) {
+
+	echo 'Please log in to create a listing!';
+
+} else {
+
+	echo 'Please complete all fields!';
+}
 ?>
+>>>>>>> ea3e56685461c705b063acb6c5bc59d3879c6192

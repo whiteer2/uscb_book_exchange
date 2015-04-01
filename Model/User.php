@@ -81,6 +81,7 @@ class User{
 	}
 	
 	function login(){
+				
 		$this->isLoggedIn = 1;
 		$_SESSION['user'] = $this;
 		return TRUE;		
@@ -89,6 +90,7 @@ class User{
 	function logout(){
 		session_destroy();
 		$this->isLoggedIn = 0;
+		return TRUE;
 	}
 	
 	function isUserSet(){
