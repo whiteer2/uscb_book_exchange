@@ -1,9 +1,6 @@
 <?php
-
 require_once 'Model/theModel.php';
-
 $query = isset($_GET['query']);
-
 if($query){
 	
 	$query = $_GET['query'];
@@ -28,6 +25,4 @@ if($query){
 else{
 	
 }
-
-
 ?>
