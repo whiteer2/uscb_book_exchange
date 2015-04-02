@@ -317,6 +317,71 @@ $(document).ready(function() {
 		return false;
 
 	});
+	
+	$("#deleteAcct").click(function() {	
+		
+		//window.alert("SWAG");	
+
+		deleteUser().success(function(data) {
+			
+			//window.alert("SWAG1");
+			
+			$('#AccountStatus').html(data);
+			
+			document.cookie = "loggedIn=0";
+			
+			setTimeout(function() {
+						window.location.href = "index.html";
+						//will redirect to your blog page (an ex: blog.html)
+					}, redirectTime);
+					//will call the function after 2 secs
+
+		}).error(function(xhr, textStatus, errorThrown) {
+			
+			//window.alert("SWAG2");
+
+			$('#AccountStatus').html(textStatus);
+
+		});
+
+	});
+	
+	$('form[name=editSchedule]').submit(function() {
+
+		//window.alert("BOOMSWAGNESS");
+
+		var schedule = this.elements.namedItem("newSchedule").value;
+		
+		if(schedule == ''){
+			
+			$('#AccountStatus').html("Please fill out the schedule before submitting!");
+			
+		}
+		else{
+			
+			editUser(schedule).success(function(data) {
+
+				$('#AccountStatus').html(data);
+				
+				setTimeout(function() {
+						window.location.href = "index.html";
+						//will redirect to your blog page (an ex: blog.html)
+					}, redirectTime);
+					//will call the function after 2 secs
+				
+
+			}).error(function(xhr, textStatus, errorThrown) {
+
+				$('#AccountStatus').html(textStatus);
+
+			});
+			
+		}
+
+		return false;
+
+	});
+	
 
 });
 //end document ready
