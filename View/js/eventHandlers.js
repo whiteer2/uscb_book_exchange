@@ -1,8 +1,18 @@
-$(document).ready(function() {
-
+$(document).ready(function() {	
+	
+	redirectTime = 1000;	
+	
 	checkLoggedInCookie();
 
 	verifyUser();
+	
+	//window.alert("boom");
+	
+	setOptions();
+	
+	initializeModals();	
+	
+	//window.alert("clap");
 
 	$("#passwordSubmit").click(function() {
 
@@ -53,6 +63,12 @@ $(document).ready(function() {
 				if (data.indexOf("Welcome") !== -1) {
 
 					document.cookie = "loggedIn=1";
+					
+					setTimeout(function() {
+						window.location.href = "index.html";
+						//will redirect to your blog page (an ex: blog.html)
+					}, redirectTime);
+					//will call the function after 2 secs
 
 				}
 
@@ -77,20 +93,30 @@ $(document).ready(function() {
 		var email = $('#emailRegister').val();
 
 		if ((email !== '')) {
+			
+			$('#registerSubmit').prop("disabled", true);
 
 			$('#registerStatus').html("Waiting for Server...");
 
 			registerUserRequest(email).success(function(data) {
+				
+				$('#registerSubmit').prop("disabled", false);
 
 				$('#registerStatus').html(data);
 
-				if (data == 'a registration email has been sent!') {
-
-					$('#registerSubmit').prop("disabled", true);
+				if (data == 'a registration email has been sent!') {					
+					
+					setTimeout(function() {
+						window.location.href = "index.html";
+						//will redirect to your blog page (an ex: blog.html)
+					}, redirectTime);
+					//will call the function after 2 secs
 
 				}
 
 			}).error(function(xhr, textStatus, errorThrown) {
+				
+				$('#registerSubmit').prop("disabled", false);
 
 				$('#registerStatus').html(textStatus);
 
@@ -156,12 +182,13 @@ $(document).ready(function() {
 
 				$('#createAcctStatus').html(data);
 
-				if (data == 'Account successfully created. Redirecting to home page. Please log in to continue.') {
+				if (data.indexOf('success')){
 
+					
 					setTimeout(function() {
 						window.location.href = "index.html";
 						//will redirect to your blog page (an ex: blog.html)
-					}, 2000);
+					}, redirectTime);
 					//will call the function after 2 secs.
 
 				}
@@ -188,6 +215,13 @@ $(document).ready(function() {
 			$('#logOutStatus').html(data);
 
 			document.cookie = "loggedIn=0";
+			
+			setTimeout(function() {
+						window.location.href = "index.html";
+						//will redirect to your blog page (an ex: blog.html)
+					}, redirectTime);
+					//will call the function after 2 secs
+			
 
 		}).error(function(xhr, textStatus, errorThrown) {
 
@@ -264,6 +298,13 @@ $(document).ready(function() {
 			createListing(ISBN, title, subject, author, publisher, price, isNegotiable, description).success(function(data) {
 
 				$('#createListingStatus').html(data);
+				
+				setTimeout(function() {
+						window.location.href = "index.html";
+						//will redirect to your blog page (an ex: blog.html)
+					}, redirectTime);
+					//will call the function after 2 secs
+				
 
 			}).error(function(xhr, textStatus, errorThrown) {
 
@@ -360,3 +401,39 @@ function verifyUser() {
 
 }
 
+function setOptions(){
+	
+	//window.alert("SWAG");
+	
+	var isLoggedIn = getCookie("loggedIn");
+	
+	//window.alert(isLoggedIn);
+	
+	$('#userOptions').empty();
+	
+	if(isLoggedIn == 1){
+		
+	//	window.alert("!");
+		
+		var nav =  '<li id = "sell"><a href="create_listing.html">Sell</a></li><li id = "settings" class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> Account Settings <span class="caret"></span></a><ul class="dropdown-menu" role="menu"><li><a href="editAccount.html">Edit Schedule</a></li><li><a href="editListings.html">Your Listings</a></li></ul><li><a id = "logOut" href="#logout-modal" data-toggle="modal" data-target="#logout-modal">Log Out</a></li></li>';
+            
+            $('#userOptions').append(nav);
+		
+	}
+	else{
+		
+		//window.alert("???");
+		
+		var nav = '<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Register/Login <span class="caret"></span></a><ul class="dropdown-menu" role="menu"><li><a href="#register-modal" data-toggle="modal" data-target="#register-modal">Register</a></li><li><a href="#login-modal" data-toggle="modal" data-target="#login-modal">Log In</a></li><li><a href="#password-modal" data-toggle="modal" data-target="#password-modal">Forgot Password</a></li></ul></li>';
+            
+            $('#userOptions').append(nav);
+	}
+	
+	
+}
+
+function initializeModals(){
+	
+	$("#modalList").load("modals.html");
+	
+}
